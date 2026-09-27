@@ -13,10 +13,12 @@ import { fileURLToPath } from "node:url";
 import {
   buildComparisonMarkdown,
   buildCoverageMarkdown,
+  buildMeasurementPlanMarkdown,
   COMPARISON_PATH,
   COVERAGE_PATH,
   EVIDENCE_GLOB_DIR,
   parseEvidenceRecord,
+  PLAN_PATH,
   type EvidenceRecord,
 } from "../src/protocolStatus.ts";
 
@@ -51,8 +53,7 @@ function write(relative: string, content: string): void {
 }
 
 console.log(`${records.length} Beleg(e) in ${EVIDENCE_GLOB_DIR} gelesen.`);
-write(
-  COVERAGE_PATH,
-  buildCoverageMarkdown(records, { seriesDays: numericFlag("series-days", 7) }),
-);
+const seriesDays = numericFlag("series-days", 7);
+write(COVERAGE_PATH, buildCoverageMarkdown(records, { seriesDays }));
 write(COMPARISON_PATH, buildComparisonMarkdown(records));
+write(PLAN_PATH, buildMeasurementPlanMarkdown(records, { seriesDays }));

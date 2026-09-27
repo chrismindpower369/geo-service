@@ -18,6 +18,10 @@ export const PROTOCOL_SYSTEMS = ["Perplexity", "Duck.ai", "ChatGPT"] as const;
 
 export const COVERAGE_PATH = "outbox/protocol-coverage.md";
 export const COMPARISON_PATH = "outbox/protocol-comparison.md";
+export const PLAN_PATH = "outbox/messplan-hotel-victoria.md";
+
+/** Field label shared by the record writer and this parser. */
+export const RANKING_FIELD = "Reihenfolge der genannten Häuser";
 
 export interface EvidenceRecord {
   /** File name inside the evidence directory. */
@@ -27,8 +31,12 @@ export interface EvidenceRecord {
   model?: string;
   mode?: string;
   url?: string;
+  /** The prompt that was submitted, as recorded in the run. */
+  prompt: string;
   answer: string;
   sources: string[];
+  /** Houses in the order the answer presented them, as recorded during the run. */
+  ranking: string[];
   mentionsHotelVictoria: boolean;
   anonymous: boolean;
 }
@@ -72,7 +80,12 @@ export function parseEvidenceRecord(file: string, text: string): EvidenceRecord 
     .filter((line) => line.startsWith("- "))
     .map((line) => line.slice(2).trim());
 
+  const prompt = /^- \*\*Prompt[^:]*:\*\*\s*„([^“]+)“/m.exec(text)?.[1]?.trim() ?? "";
   const mode = field(text, ["Sitzungsart", "Modus"]);
+  const ranking = (field(text, [RANKING_FIELD]) ?? "")
+    .split("→")
+    .map((entry) => entry.trim())
+    .filter(Boolean);
   return {
     file,
     date,
@@ -80,8 +93,10 @@ export function parseEvidenceRecord(file: string, text: string): EvidenceRecord 
     model: field(text, ["Angezeigtes Modelllabel", "Modelllabel"]),
     mode,
     url: field(text, ["Antwort-URL", "URL"]),
+    prompt,
     answer,
     sources,
+    ranking,
     mentionsHotelVictoria: /victoria/i.test(answer),
     anonymous: isAnonymous(mode),
   };
@@ -109,6 +124,13 @@ export function recordGaps(record: EvidenceRecord): RecordGap[] {
       file: record.file,
       field: "Anonymität",
       reason: "der Lauf lief in einer bestehenden angemeldeten Sitzung",
+    });
+  }
+  if (record.ranking.length === 0) {
+    gaps.push({
+      file: record.file,
+      field: "Reihenfolge",
+      reason: "die Reihenfolge der genannten Häuser wurde beim Lauf nicht festgehalten",
     });
   }
   return gaps;
@@ -256,17 +278,21 @@ export function buildComparisonMarkdown(records: EvidenceRecord[]): string {
   lines.push(
     "**Erzeugt aus:** `" +
       EVIDENCE_GLOB_DIR +
-      "/*.md` (`npm run render:status`). Nur ableitbare Angaben: ob der Hausname im protokollierten Antworttext vorkommt und welche Quellenangaben festgehalten wurden. Rangfolgen stehen im Bericht, wo sie von Hand aus der Seite gelesen wurden — nicht hier.",
+      "/*.md` (`npm run render:status`). Nur ableitbare Angaben: ob der Hausname im protokollierten Antworttext vorkommt und welche Reihenfolge beim Lauf festgehalten wurde. Fehlt die Reihenfolge, bleibt die Spalte leer — sie wird nicht geschätzt.",
   );
   lines.push("");
-  lines.push("| Datum | System | Beleg | Nennt das Haus | Quellen | anonym | Antwort-URL |");
-  lines.push("| --- | --- | --- | --- | --- | --- | --- |");
+  lines.push(
+    "| Datum | System | Beleg | Nennt das Haus | Reihenfolge (protokolliert) | Quellen | anonym | Antwort-URL |",
+  );
+  lines.push("| --- | --- | --- | --- | --- | --- | --- | --- |");
   for (const record of sorted) {
     const hasUrl = !recordGaps(record).some((gap) => gap.field === "Antwort-URL");
     lines.push(
       `| ${record.date} | ${record.system} | \`${record.file}\` | ${yesNo(
         record.mentionsHotelVictoria,
-      )} | ${record.sources.length} | ${yesNo(record.anonymous)} | ${yesNo(hasUrl)} |`,
+      )} | ${record.ranking.length > 0 ? record.ranking.join(" → ") : "— nicht protokolliert"} | ${
+        record.sources.length
+      } | ${yesNo(record.anonymous)} | ${yesNo(hasUrl)} |`,
     );
   }
   lines.push("");
@@ -277,6 +303,17 @@ export function buildComparisonMarkdown(records: EvidenceRecord[]): string {
   lines.push(
     `- ${plural(sorted.length, "Beleg", "Belege")} an ${plural(days.length, "Tag", "Tagen")}: Der Hausname kommt in ${mentioning.length} von ${sorted.length} Belegen vor.`,
   );
+  const withRanking = sorted.filter((record) => record.ranking.length > 0);
+  if (withRanking.length > 0) {
+    const firstNamed = withRanking.filter((record) => /victoria/i.test(record.ranking[0]));
+    lines.push(
+      `- In ${firstNamed.length} von ${withRanking.length} Belegen mit protokollierter Reihenfolge nennt die Antwort das Haus an erster Stelle.`,
+    );
+  } else {
+    lines.push(
+      "- In keinem Beleg ist die Reihenfolge festgehalten; über die Position des Hauses ist damit nichts ausgesagt.",
+    );
+  }
   if (days.length < 2) {
     lines.push(
       "- Alle Belege stammen von einem einzigen Tag. Damit ist **nichts** über zeitliche Stabilität oder „regelmäßige“ Nennungen belegt.",
@@ -293,9 +330,117 @@ export function buildComparisonMarkdown(records: EvidenceRecord[]): string {
   lines.push("");
   lines.push("## Was diese Belege nicht stützen");
   lines.push("");
-  lines.push("- Keine Rangfolge: die Tabelle prüft nur, ob der Name vorkommt, nicht an welcher Stelle.");
+  lines.push(
+    "- Keine Rangfolge über diese Läufe hinaus: die Spalte „Reihenfolge“ gibt nur wieder, was beim jeweiligen Lauf festgehalten wurde — nicht, wie das System bei anderen Fragen oder zu anderen Zeiten sortiert.",
+  );
   lines.push("- Keine Aussage über andere Prompts, Regionen, Konten oder Sprachversionen.");
   lines.push("- Keine Wirkung des JSON-LD-Vorschlags: die Belege zeigen Antworten, keinen Ursache-Wirkungs-Zusammenhang.");
+  lines.push("");
+  return lines.join("\n");
+}
+
+/**
+ * Plain-language plan a hotel can be shown: what the series measures, what already exists,
+ * what is still missing. Every number comes from the records, so the offer cannot outgrow
+ * the evidence.
+ */
+export function buildMeasurementPlanMarkdown(
+  records: EvidenceRecord[],
+  options: { seriesDays?: number } = {},
+): string {
+  const seriesDays = options.seriesDays ?? 7;
+  const sorted = sortRecords(records);
+  const days = Array.from(new Set(sorted.map((record) => record.date))).sort();
+  const plannedSystems = Array.from(
+    new Set<string>([...PROTOCOL_SYSTEMS, ...sorted.map((record) => record.system)]),
+  );
+  const prompt = sorted[0]?.prompt ?? "";
+  const lines: string[] = [];
+
+  lines.push("# Messplan: KI-Empfehlungen für Hotel VICTORIA Nürnberg");
+  lines.push("");
+  lines.push(
+    "**Was das ist:** der Vorschlag für eine protokollierte Messreihe dazu, wie Ihr Haus in KI-Antworten vorkommt. Der Plan beschreibt, was gemessen wird — nicht, was dabei herauskommt. Er ist aus den Rohbelegen in `" +
+      EVIDENCE_GLOB_DIR +
+      "` abgeleitet.",
+  );
+  lines.push("");
+  lines.push("## Wie gemessen wird");
+  lines.push("");
+  if (prompt) {
+    lines.push(`- In jedem Lauf dieselbe Frage, ohne Nennung Ihres Hauses: „${prompt}“`);
+  }
+  lines.push(
+    "- Je Lauf ein frischer Chat und ein System. Festgehalten werden Datum, System, angezeigtes Modelllabel, die vollständige Antwort und alle sichtbaren Quellenangaben.",
+  );
+  lines.push(
+    "- Jeder Lauf wird als Rohbeleg abgelegt und ist damit später nachprüfbar; Zusammenfassungen ersetzen keinen Beleg.",
+  );
+  lines.push("");
+  lines.push("## Was schon vorliegt");
+  lines.push("");
+  if (sorted.length === 0) {
+    lines.push("- Noch kein Lauf protokolliert.");
+  } else {
+    lines.push("| Tag | System | Ihr Haus genannt | Position in der Antwort |");
+    lines.push("| --- | --- | --- | --- |");
+    for (const record of sorted) {
+      lines.push(
+        `| ${record.date} | ${record.system} | ${yesNo(record.mentionsHotelVictoria)} | ${
+          record.ranking.length > 0 ? record.ranking.join(" → ") : "nicht festgehalten"
+        } |`,
+      );
+    }
+    lines.push("");
+    const mentioning = sorted.filter((record) => record.mentionsHotelVictoria);
+    lines.push(
+      `- ${plural(sorted.length, "Beleg", "Belege")} von ${plural(seriesDays, "geplantem Tag", "geplanten Tagen")}: In ${mentioning.length} von ${sorted.length} Antworten wird Ihr Haus genannt.`,
+    );
+  }
+  const uncovered = plannedSystems.filter(
+    (system) => !sorted.some((record) => record.system === system),
+  );
+  for (const system of uncovered) {
+    lines.push(
+      `- Für **${system}** gibt es keinen Rohbeleg; der Lauf liegt nur als Zusammenfassung vor und ist nicht neu prüfbar.`,
+    );
+  }
+  lines.push("");
+  lines.push("## Was noch fehlt");
+  lines.push("");
+  if (days.length > 0) {
+    const missing = seriesDays - days.length;
+    lines.push(
+      `- ${missing > 0 ? `${missing} von ${seriesDays} Tagen sind noch nicht gemessen; bisher belegt ist ${days.join(", ")}.` : `Alle ${seriesDays} geplanten Tage sind abgedeckt.`}`,
+    );
+    lines.push(
+      "- Pro Tag und System ein Lauf: erst mehrere Tage erlauben eine Aussage darüber, ob eine Nennung stabil bleibt. Ein einzelner Tag belegt das nicht.",
+    );
+  }
+  const gaps = sorted.flatMap((record) => recordGaps(record));
+  for (const gap of gaps) {
+    lines.push(`- \`${gap.file}\`: ${gap.field} fehlt (${gap.reason}).`);
+  }
+  lines.push("");
+  lines.push("## Was diese Messung nicht ist");
+  lines.push("");
+  lines.push(
+    "- Kein Ranking-Audit, kein Sichtbarkeits-Score und keine Erfolgszusage. Die Reihenfolge einer Antwort ist eine Momentaufnahme des jeweiligen Systems.",
+  );
+  lines.push(
+    "- Keine Aussage über andere Fragen, Orte, Sprachen, Konten oder Zeitpunkte als die protokollierten.",
+  );
+  lines.push(
+    "- Kein Nachweis, dass ein technischer Eingriff auf Ihrer Website eine Nennung verändert — dafür wäre ein Vorher-Nachher-Vergleich nötig.",
+  );
+  lines.push("");
+  lines.push("## Was wir dafür brauchen");
+  lines.push("");
+  lines.push("- Ihre Freigabe für genau diese Frage und die genannten Systeme.");
+  lines.push(`- ${plural(seriesDays, "Messtag", "Messtage")}, an denen tatsächlich gemessen wird.`);
+  lines.push(
+    "- Für Systeme mit Anmeldepflicht eine bestehende Sitzung; ohne sie bleibt das System ausdrücklich „nicht geprüft“.",
+  );
   lines.push("");
   return lines.join("\n");
 }

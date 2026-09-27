@@ -38,6 +38,11 @@ export interface CitationRunInput {
   sourcePanel?: string;
   /** Cited URLs as read during the run. */
   sources?: string[];
+  /**
+   * The houses in the order the answer presented them. Recorded by the reader during the
+   * run, because only a person can tell whether a list is a ranking or a collection.
+   */
+  ranking?: string[];
   /** Extra reading notes, e.g. which page parts were chrome rather than answer. */
   notes?: string[];
 }
@@ -99,6 +104,11 @@ export function buildEvidenceMarkdown(input: CitationRunInput): string {
   lines.push(
     `- **Erfassungsmethode:** ${input.method ?? "Auslesen des gerenderten Seitentexts während des Durchlaufs"}`,
   );
+  const ranking = (input.ranking ?? []).map((entry) => entry.trim()).filter(Boolean);
+  if (ranking.length > 0) {
+    lines.push(`- **Reihenfolge der genannten Häuser:** ${ranking.join(" → ")}`);
+  }
+
   lines.push("");
   lines.push("## Vollständiger Antworttext (wörtlich)");
   lines.push("");

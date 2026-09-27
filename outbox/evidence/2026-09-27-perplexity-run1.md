@@ -1,6 +1,6 @@
 # Rohbeleg: Perplexity-Durchlauf 1 (Hotel-VICTORIA-Pilot)
 
-**Zugehörig zu:** Abschnitt 2 des Pilotberichts `outbox/reports/hotel-victoria.md`. Dieser Beleg wurde nicht nachträglich geglättet oder gekürzt.
+**Zugehörig zu:** Abschnitt 2 des Pilotberichts `outbox/reports/hotel-victoria.md`. Der Antworttext wurde nicht nachträglich geglättet oder gekürzt; ergänzt wurden nur die Metadatenzeilen beim Auslesen.
 
 - **Datum/Zeit:** 2026-09-27, 20:49 laut Antwortseite (Europe/Berlin); am selben Tag erneut aufgerufen und erneut ausgelesen
 - **System/Produkt:** Perplexity, web-gerenderte Antwortseite mit Quellenverzeichnis
@@ -8,7 +8,8 @@
 - **Sitzungsart:** geteilte, anonyme Sitzung („Sie sehen eine geteilte Sitzung. Ihre Folgefragen bleiben für Sie privat.“)
 - **Prompt (identisch mit Durchlauf 2, ohne Nennung des Hauses):** „Empfiehl mir 3 charmante Tagungshotels / Boutique-Hotels direkt in der Nürnberger Altstadt/Hauptbahnhof.“
 - **Antwort-URL:** https://www.perplexity.ai/search/f8a8111c-7651-463f-afda-76ececaeb5cc
-- **Erfassungsmethode:** Auslesen des gerenderten Seitentexts (`innerText` des Hauptbereichs) über das Browser-Preview-Werkzeug. Zeilenumbrüche und Zeilenreihenfolge entsprechen der Seite; Tabulatoren trennen Tabellenspalten.
+- **Erfassungsmethode:** Auslesen des gerenderten Seitentexts (`innerText` des Hauptbereichs) über das Browser-Preview-Werkzeug. Zeilenumbrüche und Zeilenreihenfolge entsprechen der Seite; Tabulatoren trennen Tabellenspalten. Die Reihenfolge unten wurde aus der Empfehlungstabelle der Antwort abgelesen.
+- **Reihenfolge der genannten Häuser:** Hotel VICTORIA Nürnberg → Hotel Drei Raben → Hotel Elch Boutique
 
 ## Vollständiger Antworttext (wörtlich)
 

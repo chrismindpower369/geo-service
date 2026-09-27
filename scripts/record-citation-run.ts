@@ -6,6 +6,7 @@
  *     --system "ChatGPT" --time "21:32 (Europe/Berlin)" --model "ChatGPT" \
  *     --mode "angemeldete Sitzung, temporärer Chat" --answer answer.txt \
  *     --source-panel "3 Quellen" --source "https://example.com/page" \
+ *     --ranking "Haus A; Haus B; Haus C" \
  *     --note "Kopfzeile und Folgefragen sind Seitengerüst."
  *
  * The answer text comes from `--answer <file>` or stdin. This script queries nothing: the
@@ -81,9 +82,12 @@ const markdown = buildEvidenceMarkdown({
   model: flag("model"),
   mode: flag("mode"),
   url: flag("url"),
-  method: flag("method"),
-  sourcePanel: flag("source-panel"),
-  sources: repeated("source"),
+  method: flag("method"),      sourcePanel: flag("source-panel"),
+      sources: repeated("source"),
+      ranking: flag("ranking")
+        ?.split(";")
+        .map((entry) => entry.trim())
+        .filter(Boolean),
   notes: repeated("note"),
 });
 
