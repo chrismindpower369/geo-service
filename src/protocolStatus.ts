@@ -25,14 +25,9 @@ export interface SystemWaiver {
 /**
  * Planned systems whose missing record is accepted on purpose. A waiver must give a reason to
  * count, and it must not outlive its gap: once the system has a record, the waiver has to go.
+ * An empty list is the state to aim for — it means every planned system carries raw evidence.
  */
-export const COVERAGE_WAIVERS: readonly SystemWaiver[] = [
-  {
-    system: "Duck.ai",
-    reason:
-      "der anonyme Chat hatte keinen Verlaufslink und ist nach dem Schließen nicht abrufbar; vorhanden ist nur die Zusammenfassung im Pilotbericht",
-  },
-];
+export const COVERAGE_WAIVERS: readonly SystemWaiver[] = [];
 
 export interface CoverageGap {
   system: string;
