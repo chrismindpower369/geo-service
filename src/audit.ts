@@ -8,6 +8,12 @@ export interface AuditCheckData {
   finding: string;
   recommendation: string;
   evidence?: string[];
+  /**
+   * Long-form narrative for this check, if a report renders it as its own section.
+   * `formatAuditReportMarkdown` ignores it; a section-based report uses it as the body so
+   * the heading, the finding and the prose all come from the same check.
+   */
+  details?: string;
 }
 
 export interface AuditReportData {
