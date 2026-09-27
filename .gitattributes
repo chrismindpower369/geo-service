@@ -1,0 +1,5 @@
+# Zeilenenden festnageln: Die Belege, der Bericht und die abgeleiteten Views werden
+# byte-genau geprüft; zwei Tests im Repo matchen auf \n. Ohne diese Zeile schreibt ein
+# Windows-Checkout (core.autocrlf=true) CRLF in die Dateien und die Suite wird rot,
+# obwohl der committete Inhalt unverändert ist.
+* text=auto eol=lf
