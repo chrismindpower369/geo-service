@@ -16,7 +16,7 @@
 | 2026-09-27 | Perplexity | ja | Hotel VICTORIA Nürnberg → Hotel Drei Raben → Hotel Elch Boutique |
 
 - 2 Belege von 7 geplanten Tagen: In 2 von 2 Antworten wird Ihr Haus genannt.
-- Für **Duck.ai** gibt es keinen Rohbeleg; der Lauf liegt nur als Zusammenfassung vor und ist nicht neu prüfbar.
+- Für **Duck.ai** gibt es keinen Rohbeleg (bewusst offen: der anonyme Chat hatte keinen Verlaufslink und ist nach dem Schließen nicht abrufbar; vorhanden ist nur die Zusammenfassung im Pilotbericht); der Lauf ist damit nicht neu prüfbar.
 
 ## Was noch fehlt
 
