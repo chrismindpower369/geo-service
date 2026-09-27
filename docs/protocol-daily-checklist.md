@@ -1,10 +1,18 @@
 # Tages-Checkliste: ein Mess-Tag in fünf Minuten
 
-Für die Serie der KI-Zitierungsprüfung. Ein Tag kostet: eine Antwort je System auslesen, drei Befehle, ein Blick auf die Ausgabe. Die Belege selbst schreibt das Werkzeug — nichts wird von Hand in Markdown übertragen.
+Für die Serie der KI-Zitierungsprüfung. Ein Tag kostet: eine Antwort je System auslesen, drei `record:run`-Aufrufe, ein `render:status`, ein `test`. Die Belege selbst schreibt das Werkzeug — nichts wird von Hand in Markdown übertragen.
+
+**Der Prüfprompt dieser Serie** — wörtlich identisch für alle Systeme und alle Läufe (Quelle: `NEUTRAL_PROMPT` in `src/citationRun.ts`):
+
+> Empfiehl mir 3 charmante Tagungshotels / Boutique-Hotels direkt in der Nürnberger Altstadt/Hauptbahnhof.
+
+Ändert sich dieser Wortlaut, beginnt eine neue Serie: die alten Läufe bleiben nur unter ihrem alten Prompt vergleichbar.
 
 ## 1. Je System einen Lauf erfassen
 
-Antworttext vorher in eine Datei legen (z. B. `answers/<system>.txt`), nicht in den Befehl einfügen. Die Reihenfolge immer als `A; B; C` mitgeben; wenn die Antwort keine Reihenfolge erkennen lässt, den Schalter weglassen — dann bleibt die Spalte leer statt geraten.
+Zuerst den Antworttext in eine Datei legen: Verzeichnis einmal anlegen (`mkdir -p answers`), je System eine Datei, Inhalt ist der wörtliche Text der Antwortseite — nicht in den Befehl einfügen. Diese Dateien sind reine Eingabe für das Werkzeug und gehören nicht ins Repo.
+
+Die Reihenfolge immer als `A; B; C` mitgeben; wenn die Antwort keine Reihenfolge erkennen lässt, den Schalter weglassen — dann bleibt die Spalte leer statt geraten.
 
 **Perplexity** (anonymer Chat, Antwort-URL vorhanden):
 
@@ -12,6 +20,7 @@ Antworttext vorher in eine Datei legen (z. B. `answers/<system>.txt`), nicht in 
 npm run record:run -- \
   --system "Perplexity" \
   --time "HH:MM laut Antwortseite (Europe/Berlin)" \
+  --model "<angezeigtes Label, sonst „nicht angezeigt“>" \
   --mode "anonymer Chat, geteilte Sitzung" \
   --url "<Antwort-URL aus der Adresszeile>" \
   --source-panel "<z. B. 25 Quellen>" \
@@ -19,6 +28,8 @@ npm run record:run -- \
   --ranking "Haus A; Haus B; Haus C" \
   --answer answers/perplexity.txt
 ```
+
+Zeigt Perplexity kein Modelllabel an (so war es im ersten Lauf), ist `--model "nicht angezeigt"` die richtige Angabe: eine dokumentierte Absenz, keine Lücke.
 
 **ChatGPT** (nur mit bestehender Sitzung; temporären Chat verwenden, Sitzungsart nicht verschweigen):
 
@@ -48,6 +59,14 @@ npm run record:run -- \
 ```
 
 Die Laufnummern vergibt das Werkzeug selbst (`run1`, `run2`, … je Datum und System). `--run` nur setzen, wenn ein Beleg bewusst ersetzt wird — dann zusätzlich `--force`.
+
+Bei Erfolg schreibt das Werkzeug genau eine Zeile dieser Form:
+
+```text
+Beleg geschrieben: outbox/evidence/2026-09-28-perplexity-run1.md (Perplexity, Durchlauf 1)
+```
+
+Kommt stattdessen „Beleg abgelehnt …“, fehlt ein Pflichtfeld — dann greift der nächste Abschnitt.
 
 ### Wenn ein Feld fehlt: das Werkzeug lehnt den Beleg ab
 
