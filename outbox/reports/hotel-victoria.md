@@ -28,6 +28,7 @@ Die offizielle Ankunftsseite verortet das Hotel am Eingang zur Altstadt, gegenü
 - **Ergebnis:** Tabelle mit drei Empfehlungen — 1. **Hotel Victoria Nürnberg** („Direkt am Tor zur Altstadt, wenige Schritte vom Hauptbahnhof“; „Besonders charmantes Boutique-Hotel in einem denkmalgeschützten Gebäude von 1896; 65 individuell gestaltete Zimmer und passende Räume für kleinere Tagungen. Das Hotel bezeichnet sich selbst ausdrücklich als Tagungshotel.“), 2. Hotel Drei Raben, 3. Hotel Elch Boutique. In der Einordnung: „Für eine echte Tagung mit professionellem Rahmen: Hotel Victoria.“ Für mehr als etwa 20–30 Personen nannte die Antwort zusätzlich Scandic Nürnberg Central und Le Méridien Grand Hotel Nürnberg.
 - **Zitat-URLs (Auswahl aus „25 Quellen“, das Hotel betreffend):** https://www.hotelvictoria.de/ (erste Quelle) · https://tourismus.nuernberg.de/themen/tagung-kongress/tagungshotels/ · https://www.scandichotels.com/de/tagungen-events/nuernberg
 - **Sachliche Prüfung:** Lage- und Zimmerangaben stimmen mit den offiziellen Seiten überein (65 Zimmer, Gebäude von 1896, Altstadtlage am Hauptbahnhof); im Befundtext ist kein Widerspruch erkennbar.
+- **Rohbeleg:** vollständiger Antworttext, Inline-Zitat-Chips und Quellenpanel: `outbox/evidence/2026-09-27-perplexity-run1.md`
 
 ### Durchlauf 2 — Duck.ai (angezeigtes Modell „GPT-5.6 Luna“, anonymer Chat)
 
@@ -38,7 +39,8 @@ Die offizielle Ankunftsseite verortet das Hotel am Eingang zur Altstadt, gegenü
 ### Grenzen dieses Befunds
 
 - Zwei Läufe an einem Tag, wenige Minuten auseinander, je ein Produkt: Das belegt **keine zeitliche Stabilität** und keine „regelmäßige“ Nennung; eine Messreihe (wiederholte Läufe je System und Prompt mit Protokoll) fehlt weiterhin.
-- Die Auswahlkriterien der Systeme sind nicht einsehbar; Perplexity zeigte zusätzlich ein Karten-/Places-Modul mit neun Hotels, die Empfehlung selbst war eine Top-3-Tabelle.
+- Die Auswahlkriterien der Systeme sind nicht einsehbar; Perplexity zeigte zusätzlich ein Karten-/Places-Modul mit zehn Hotels, die Empfehlung selbst war eine Top-3-Tabelle.
+- Durchlauf 2 ist nicht mehr im Original abrufbar: der anonyme Duck.ai-Chat hatte keinen Verlaufslink und ist nach dem Schließen nicht wieder aufrufbar. Belegt sind dort die wörtlich zitierten Passagen und die vollständigen Quellen-URLs, nicht der komplette Antworttext. Durchlauf 1 ist dagegen über die Antwort-URL und den Rohbeleg vollständig nachprüfbar.
 - ChatGPT wurde **nicht geprüft**: chatgpt.com verlangt im geteilten Browser eine Anmeldung; es wurde kein Login durchgeführt und keine Antwort unterstellt.
 - Die Nennung bei Perplexity stützt sich u. a. auf die eigene Website des Hotels („bezeichnet sich selbst ausdrücklich als Tagungshotel“) — das stützt den technischen Hebel aus Abschnitt 4 (vollständige, strukturierte Angebotsdaten), ist aber kein Wirkungsnachweis des JSON-LD-Vorschlags.
 
@@ -180,8 +182,8 @@ Der folgende selbstständige Block ist syntaktisch gültiges JSON-LD und verwend
 
 ## Quellen (offizielle Website und Schema.org)
 
-- Perplexity-Antwort (Durchlauf 1, 20:49): https://www.perplexity.ai/search/f8a8111c-7651-463f-afda-76ececaeb5cc
-- Duck.ai-Antwort (Durchlauf 2): anonymer Chat ohne addressierbaren Verlaufslink; Prompt, Antwort und Quellen-URLs sind im Bericht wörtlich protokolliert
+- Perplexity-Antwort (Durchlauf 1, 20:49): https://www.perplexity.ai/search/f8a8111c-7651-463f-afda-76ececaeb5cc — vollständiger Antworttext und Quellenangaben im Rohbeleg `outbox/evidence/2026-09-27-perplexity-run1.md`
+- Duck.ai-Antwort (Durchlauf 2): anonymer Chat ohne addressierbaren Verlaufslink; im Bericht stehen Prompt, wörtliche Zitate und die Quellen-URLs, der vollständige Antworttext liegt nicht vor
 - Hotel-Startseite / vorhandenes Microdata und sichtbare Beschreibung: https://www.hotelvictoria.de/ (Browser-DOM am 27.09.2026; `Hotel`-Microdata vorhanden, kein JSON-LD-Script in der beobachteten Startseitenansicht; in Durchlauf 1 des KI-Tests als erste Quelle zitiert)
 - Impressum / Firmenname, Anschrift und `book@hotelvictoria.de`: https://www.hotelvictoria.de/kontakt/impressum
 - Lage / Handwerkerhof, Hauptbahnhof und Altstadteingang: https://www.hotelvictoria.de/en/contact/arrival-here
