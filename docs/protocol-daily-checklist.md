@@ -2,15 +2,28 @@
 
 Für die Serie der KI-Zitierungsprüfung. Ein Tag kostet: eine Antwort je System auslesen, drei `record:run`-Aufrufe, ein `render:status`, ein `test`. Die Belege selbst schreibt das Werkzeug — nichts wird von Hand in Markdown übertragen.
 
+## Voraussetzungen (einmal je Rechner)
+
+- **Repo-Wurzel:** alle Befehle laufen dort, wo `package.json` liegt.
+- **Node:** 22.6 oder neuer (die Skripte nutzen Nodes TypeScript-Stripping); getestet mit 24.x.
+- **Abhängigkeiten:** einmal `npm install`.
+- **Zeilenenden:** `.gitattributes` nagelt LF für alle Textdateien fest. Trotzdem kann ein alter Arbeitsbaum noch CRLF tragen — der Weg steht unter „Wenn etwas klemmt".
+
+## 1. Je System einen Lauf erfassen
+
 **Der Prüfprompt dieser Serie** — wörtlich identisch für alle Systeme und alle Läufe (Quelle: `NEUTRAL_PROMPT` in `src/citationRun.ts`):
 
 > Empfiehl mir 3 charmante Tagungshotels / Boutique-Hotels direkt in der Nürnberger Altstadt/Hauptbahnhof.
 
 Ändert sich dieser Wortlaut, beginnt eine neue Serie: die alten Läufe bleiben nur unter ihrem alten Prompt vergleichbar.
 
-## 1. Je System einen Lauf erfassen
+### Den Antworttext auslesen
 
-Zuerst den Antworttext in eine Datei legen: Verzeichnis einmal anlegen (`mkdir -p answers`), je System eine Datei, Inhalt ist der wörtliche Text der Antwortseite — nicht in den Befehl einfügen. Diese Dateien sind reine Eingabe für das Werkzeug und gehören nicht ins Repo.
+1. Frischer Chat je System: kein Kontext aus Vorfragen, keine Nachfragen.
+2. Den Prüfprompt wörtlich senden.
+3. Den vollständigen Antwortbereich auslesen — im Browser den sichtbaren Antworttext komplett kopieren (technisch der `innerText` des Hauptbereichs). Nichts kürzen, nichts glätten, nichts ergänzen.
+4. In `answers/<system>.txt` speichern; Verzeichnis einmal anlegen mit `mkdir -p answers`. Diese Dateien sind reine Eingabe für das Werkzeug und gehören nicht ins Repo.
+5. Für den Beleg zusätzlich notieren: Uhrzeit laut Antwortseite, angezeigtes Modelllabel, Sitzungsart, Antwort-URL (falls vorhanden), sichtbare Quellen bzw. Zitat-Chips und die Reihenfolge der genannten Häuser.
 
 Die Reihenfolge immer als `A; B; C` mitgeben; wenn die Antwort keine Reihenfolge erkennen lässt, den Schalter weglassen — dann bleibt die Spalte leer statt geraten.
 
@@ -84,9 +97,36 @@ npm run render:status   # Abdeckung, Vergleich und Messplan aus den Rohbelegen
 npm test                # die Ableitungen und der Report sind byte-genau gepinnt
 ```
 
-`npm run render:report` nur, wenn sich Abschnitt 2 des Pilotberichts inhaltlich ändert (also wenn ein neues System oder eine neue Laufzahl dort stehen soll).
+`npm run render:report` nur, wenn sich Abschnitt 2 des Pilotberichts inhaltlich ändert — wie das geht, steht im nächsten Abschnitt.
 
-## 3. Regeln für das Auslesen
+## 3. Einen Lauf in den Bericht bringen
+
+Der Pilotbericht ist gerendert, nicht handgeschrieben. Abschnitt 2 lebt in `src/pilotReport.ts`:
+
+1. Lauf ergänzen: in `DIREKTE_NENNUNG` einen Block `### Durchlauf N — <System> (…)` anlegen, mit Zeit und Produkt, Sitzungsart, Antwort-URL oder dem ausdrücklichen Vermerk, dass keine existiert, dem Ergebnis samt wörtlichen Belegstellen und dem Pfad zum Rohbeleg.
+2. Die Zusammenfassung in `KURZBEFUND` und die Quellenliste `QUELLEN` mitziehen — jede Aussage des Berichts nennt ihren Beleg.
+3. `npm run render:report` schreibt `outbox/reports/hotel-victoria.md` neu.
+4. `npm test`: `tests/pilotReport.test.ts` vergleicht die Datei byte-genau mit dem Modell. Eine Abweichung heißt rendern, nicht die Datei von Hand ändern.
+
+Regel: Zahlen und Aussagen ändern sich nur im Modell, nie direkt in der Datei.
+
+## 4. Wenn etwas klemmt
+
+- **`Beleg abgelehnt: folgende Protokollfelder fehlen: Modelllabel.`** — `--model` fehlt. Echtes Label übernehmen oder `--model "nicht angezeigt"` setzen.
+- **`… already exists; pass --run or --force to replace it`** — für diese Laufnummer gibt es schon einen Beleg. Für einen neuen Lauf die Nummer freilassen; bewusst ersetzen nur mit `--run <N> --force`.
+- **`ENOENT: no such file or directory … answers/…txt`** — die Antwortdatei fehlt. `mkdir -p answers` und die Datei anlegen (Methode in Abschnitt 1).
+- **`npm run record:run` kennt den Befehl nicht** — Abhängigkeiten fehlen: `npm install` in der Repo-Wurzel.
+- **Tests rot, oder `render:status` bricht mit `missing verbatim answer block` ab** — der Arbeitsbaum trägt CRLF statt LF. Prüfen und neu materialisieren:
+
+```bash
+git ls-files --eol | grep -c 'w/crlf'          # muss 0 sein
+git ls-files -z | xargs -0 rm -f && git checkout -- .
+```
+
+`.gitattributes` erzwingt LF; die zwei Schritte holen einen alten Arbeitsbaum nach. Der committete Inhalt war nie betroffen — danach `npm test` erneut laufen lassen.
+- **`renders byte-identical to the committed outbox file` schlägt fehl** — die Berichtsdatei weicht vom Modell ab: `npm run render:report` statt Handarbeit in der Markdown-Datei.
+
+## 5. Regeln für das Auslesen
 
 - Nur auslesen, was die Seite zeigt: vollständiger Antworttext, sichtbare Quellenangaben bzw. Zitat-Chips, angezeigtes Modelllabel, Uhrzeit.
 - Keine Anmeldung beschaffen, keine Zugriffskontrolle umgehen. Verlangt ein System eine Anmeldung und es besteht keine Sitzung, bleibt es „nicht geprüft“ — und das wird so berichtet.
