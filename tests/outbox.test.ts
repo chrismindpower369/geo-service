@@ -134,10 +134,19 @@ describe("prepared Nürnberg outbox", () => {
     for (const relative of referenced) {
       const evidence = evidenceFiles[`../${relative}`];
       expect(evidence, `pilot report references missing ${relative}`).toBeDefined();
-      // The evidence must actually contain the neutral prompt and its answer URL.
+      // Each record must carry the neutral prompt and a substantial verbatim answer block.
       expect(evidence).toContain("Empfiehl mir 3 charmante Tagungshotels");
-      expect(evidence).toContain("https://www.perplexity.ai/search/");
+      const block = evidence!.match(
+        /## Vollständiger Antworttext \(wörtlich\)\n\n```text\n([\s\S]*?)\n```/,
+      );
+      expect(block, `${relative} has no verbatim answer block`).not.toBeNull();
+      expect(block![1].trim().length).toBeGreaterThan(200);
     }
+
+    // The Perplexity record is the one that stays checkable through its answer URL.
+    expect(evidenceFiles["../outbox/evidence/2026-09-27-perplexity-run1.md"]).toContain(
+      "https://www.perplexity.ai/search/",
+    );
   });
 
   it("keeps five email drafts in the explicitly unsent outbox file", () => {

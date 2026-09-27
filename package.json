@@ -5,7 +5,9 @@
   "type": "module",
   "scripts": {
     "test": "vitest run",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "render:report": "node --experimental-strip-types --no-warnings scripts/render-pilot-report.ts",
+    "record:run": "node --experimental-strip-types --no-warnings scripts/record-citation-run.ts"
   },
   "devDependencies": {
     "@types/node": "^26.6.3",
