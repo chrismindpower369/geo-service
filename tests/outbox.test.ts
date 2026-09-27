@@ -38,6 +38,11 @@ const reportFiles = import.meta.glob("../outbox/reports/*.md", {
 }) as Record<string, string>;
 const { default: leadsJson } = await import("../outbox/nuernberg-leads.json?raw");
 const { default: drafts } = await import("../outbox/email-drafts.md?raw");
+const evidenceFiles = import.meta.glob("../outbox/evidence/*.md", {
+  eager: true,
+  query: "?raw",
+  import: "default",
+}) as Record<string, string>;
 
 function extractJsonLd(report: string): Record<string, unknown> {
   const match = report.match(/<script type="application\/ld\+json">\n([\s\S]*?)\n<\/script>/);
@@ -112,6 +117,26 @@ describe("prepared Nürnberg outbox", () => {
       const list = jsonLd[listKey] as unknown[];
       expect(Array.isArray(list), `JSON-LD must define ${listKey}`).toBe(true);
       expect(list.length).toBeGreaterThan(0);
+    }
+  });
+
+  it("points at raw evidence files that exist and carry the recorded run", () => {
+    const pilot = reportFiles[PILOT_REPORT_PATH];
+    expect(pilot).toBeDefined();
+
+    // Every `outbox/evidence/...` path named in the report must resolve to a real file,
+    // so the recorded runs stay checkable instead of becoming dead references.
+    const referenced = Array.from(
+      new Set(pilot!.match(/outbox\/evidence\/[^`\s)]+/g) ?? []),
+    );
+    expect(referenced.length).toBeGreaterThan(0);
+
+    for (const relative of referenced) {
+      const evidence = evidenceFiles[`../${relative}`];
+      expect(evidence, `pilot report references missing ${relative}`).toBeDefined();
+      // The evidence must actually contain the neutral prompt and its answer URL.
+      expect(evidence).toContain("Empfiehl mir 3 charmante Tagungshotels");
+      expect(evidence).toContain("https://www.perplexity.ai/search/");
     }
   });
 
