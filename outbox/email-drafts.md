@@ -1,8 +1,10 @@
 # E-Mail-Entwürfe – nicht versenden
 
-**Status:** Nur Entwürfe für manuelle Prüfung. Es wurde keine E-Mail versendet; dieses Repository enthält keine Versandautomatik. Die vier Probeberichte für die übrigen Kandidaten sind Simulationen. Der Hotel-VICTORIA-Bericht ist eine manuelle, quellenbelegte Website-/Schema-Prüfung, aber keine KI-Sichtbarkeitsmessung. Vor einer etwaigen Kontaktaufnahme Inhalt, Ansprechpartner und Rechtsgrundlage selbst prüfen.
+**Status:** Nur Entwürfe für manuelle Prüfung. Es wurde keine E-Mail versendet; dieses Repository enthält keine Versandautomatik. Alle fünf Entwürfe liegen als gespeicherte Entwürfe im Zoho-Mail-Konto `chris@mindpower-on-fire.de` (Abschnitt 5 mit ID, Abschnitte 1–4 angelegt 27.09.2026, 8:11–8:15 PM). In allen fünf Entwürfen steht der Absender im Text; die automatisch angehängte Kontosignatur wurde je Entwurf entfernt, damit der Name nicht doppelt erscheint. Die vier Probeberichte für die übrigen Kandidaten sind Simulationen und bleiben es. Der Hotel-VICTORIA-Bericht ist dagegen ein manueller, quellenbelegter Pilot (Website-/Schema-Prüfung) – kein Simulationsreport, aber auch keine KI-Sichtbarkeitsmessung; die KI-Zitierungsanalyse ist im Bericht als **nicht verifiziert** gekennzeichnet. Vor einer etwaigen Kontaktaufnahme Inhalt, Ansprechpartner und Rechtsgrundlage selbst prüfen.
 
 ## 1. Der Bäcker Feihl
+
+**Status:** In Zoho Mail als Entwurf gespeichert (27.09.2026, 8:13 PM, `chris@mindpower-on-fire.de`) – **nicht versendet**.
 
 **An:** info@baecker-feihl.de  
 **Betreff:** Sichtbarkeit Ihrer regionalen B2B-Angebote – unverbindliche Frage
@@ -14,13 +16,16 @@ auf Ihrer Website beschreiben Sie die Belieferung von Restaurants, Cafés, Super
 Ein kurzer Probe-Report zu Ihrem Betrieb liegt als **Simulation** vor. Er enthält keine Live-Abfrage und keine gemessene Aussage über Ihre aktuelle Sichtbarkeit. Wäre ein unverbindlicher Austausch dazu für Sie interessant?
 
 Freundliche Grüße  
-[Name / Unternehmen]
+Christopher Götz  
+mindpower-on-fire.de
 
 **Quellen zur Recherche:** https://baecker-feihl.de/b2b/ · https://baecker-feihl.de/kontakt/
 
 ---
 
 ## 2. Bäckerei Christian Albert
+
+**Status:** In Zoho Mail als Entwurf gespeichert (27.09.2026, 8:14 PM, `chris@mindpower-on-fire.de`) – **nicht versendet**.
 
 **An:** chef@baeckerei-albert.de  
 **Betreff:** Probe-Simulation zur Online-Auffindbarkeit Ihrer Nürnberger Bäckerei
@@ -32,13 +37,16 @@ Ihre Website beschreibt die handwerkliche Bäckerei in Nürnberg und führt auch
 Der vorbereitete Probe-Report ist ausdrücklich nur eine **Simulation**: Die Website wurde dafür nicht live geprüft, und es werden keine Ergebnisse oder Erfolge behauptet. Falls das Thema für Ihren Betrieb relevant ist, freue ich mich über eine Rückmeldung.
 
 Freundliche Grüße  
-[Name / Unternehmen]
+Christopher Götz  
+mindpower-on-fire.de
 
 **Quellen zur Recherche:** https://baeckerei-albert.de/Kontakt/ · https://baeckerei-albert.de/Fuer-Wiederverkaeufer/
 
 ---
 
 ## 3. Zahnarztpraxis Dr. Miriam Fischer
+
+**Status:** In Zoho Mail als Entwurf gespeichert (27.09.2026, 8:15 PM, `chris@mindpower-on-fire.de`) – **nicht versendet**.
 
 **An:** hallo@dr-miriam-fischer.de  
 **Betreff:** Transparente Probe-Simulation zur lokalen Praxisauffindbarkeit
@@ -50,13 +58,16 @@ auf Ihrer Praxiswebsite stellen Sie unter anderem mikroskopische Endodontie, Kie
 Für Ihre Praxis haben wir einen Probe-Report als **Simulation** vorbereitet. Er enthält keine Live-Recherche zu KI-Systemen oder Mitbewerbern und ist keine Bewertung Ihrer tatsächlichen Auffindbarkeit. Wäre ein kurzer, unverbindlicher Austausch zum Ansatz grundsätzlich interessant?
 
 Freundliche Grüße  
-[Name / Unternehmen]
+Christopher Götz  
+mindpower-on-fire.de
 
 **Quellen zur Recherche:** https://www.zahnarztpraxis-drfischer.de/ · https://www.zahnarztpraxis-drfischer.de/impressum
 
 ---
 
 ## 4. art & business hotel Nürnberg
+
+**Status:** In Zoho Mail als Entwurf gespeichert (27.09.2026, 8:11 PM, `chris@mindpower-on-fire.de`) – **nicht versendet**.
 
 **An:** info@art-business-hotel.com  
 **Betreff:** GEO-Sichtbarkeit für Geschäftsreisende – unverbindlicher Austausch
@@ -68,7 +79,8 @@ Ihre Website stellt die zentrale Lage nahe Hauptbahnhof und Messe sowie Ihr Ange
 Der für Ihr Haus vorbereitete Probe-Report ist eine **Simulation**, keine Live-Prüfung und keine Aussage zur tatsächlichen Sichtbarkeit. Wenn Sie sich mit dem Thema beschäftigen, erläutere ich den Ansatz gern unverbindlich.
 
 Freundliche Grüße  
-[Name / Unternehmen]
+Christopher Götz  
+mindpower-on-fire.de
 
 **Quellen zur Recherche:** https://www.art-business-hotel.com/ · https://www.art-business-hotel.com/impressum/
 
@@ -78,18 +90,18 @@ Freundliche Grüße
 
 **Status:** In Zoho Mail als Entwurf angelegt und gespeichert (Entwürfe-Ordner, Entwurf-ID `1790527250684013600`, Absender `chris@mindpower-on-fire.de`, 27.09.2026) – **nicht versendet**. Der Absender steht im Text; die von Zoho automatisch eingefügte Kontosignatur (`Christopher Christopher Götz`) wurde nur in diesem Entwurf wieder entfernt, damit der Name nicht doppelt erscheint – ohne Änderung an Kontoeinstellungen.
 
-**An:** event@hotelvictoria.de  
-**Betreff:** Manuell geprüfter Sichtbarkeitscheck zu Ihren Tagungs- und Eventangeboten – unverbindlich
+**An:** book@hotelvictoria.de  
+**Betreff:** Unverbindlicher Website-Check und JSON-LD-Entwurf für Hotel VICTORIA
 
-Guten Tag Frau Lau,
+Guten Tag liebes Hotel-VICTORIA-Team,
 
-auf Ihrer Tagungsseite nennen Sie sechs Tagungsräume, Raumgrößen bis 120 m² und Sie als Verantwortliche für Tagungen und Events. Wir erstellen einen GEO-Sichtbarkeitscheck, der Unternehmen dabei unterstützt, ihre Darstellung in KI-Antworten strukturiert zu prüfen – ohne Erfolgsversprechen.
+bei einer manuellen Sichtung Ihrer öffentlich zugänglichen Website ist aufgefallen, dass die Startseite bereits Hotel-Microdata enthält. Der beigefügte Pilotbericht (`outbox/reports/hotel-victoria.md`) fasst die geprüften öffentlichen Angaben zusammen und schlägt einen ergänzenden Schema.org-JSON-LD-Block für Hotel, Zimmer, Ausstattung und Angebote vor. Bitte lassen Sie die Fakten und die veränderlichen Preis- und Parkangaben vor einer Verwendung von Ihrer Seite prüfen.
 
-Für das Hotel VICTORIA liegt ein belegter, manuell erstellter Pilotbericht vor. Wir haben Ihre öffentlichen Seiten am 27.09.2026 gelesen, mit Quellen dokumentiert (unter anderem Microdata zu Hotel, Adresse und Bewertung; kein JSON-LD in der geprüften Startseitenansicht) und vier neutrale Fragen an zwei KI-Systeme gestellt. Ergebnis als Momentaufnahme: Ein System nannte Ihr Haus in allen vier Antworten, ein zweites nur in zwei von vier – dort teils mit falschen Angaben zu Lage und Kapazität. Das ist keine Messung und keine Zusage.
+Für das Hotel VICTORIA liegt ein belegter, manuell erstellter Pilotbericht vor: Ihre öffentlichen Seiten wurden am 27.09.2026 gelesen und mit Quellen dokumentiert (unter anderem Microdata zu Hotel, Adresse und Bewertung; kein JSON-LD in der geprüften Startseitenansicht). Eine KI-Sichtbarkeitsmessung enthält der Bericht nicht; die KI-Zitierungsanalyse ist als **nicht verifiziert** gekennzeichnet, weil keine nachvollziehbaren Antwortmitschnitte mit Quellenlinks vorliegen – es werden weder Nennungen noch Rankings behauptet.
 
-Wenn das für Sie interessant ist, sende ich Ihnen den Bericht gern unverbindlich zur Einsicht zu und erläutere den Ansatz in wenigen Minuten.
+Wenn der Bericht für Ihr Marketing- oder Webteam nützlich ist, erläutere ich ihn gern unverbindlich in wenigen Minuten.
 
-Quellen: https://www.hotelvictoria.de/tagungshotel-nuernberg/kapazitaeten-preise-technik · https://www.hotelvictoria.de/kontakt/impressum
+Quellen zur Prüfung: https://www.hotelvictoria.de/ · https://www.hotelvictoria.de/kontakt/impressum · https://www.hotelvictoria.de/en/contact/arrival-here · https://www.hotelvictoria.de/en/meeting/our-meeting-rooms · https://www.hotelvictoria.de/en/event/our-event-service · https://www.hotelvictoria.de/en/accommodation/our-rooms · https://www.hotelvictoria.de/en/boutique-hotel/a-z-information
 
 Freundliche Grüße  
 Christopher Götz  
