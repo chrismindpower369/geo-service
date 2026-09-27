@@ -8,9 +8,13 @@ import {
   buildMeasurementPlanMarkdown,
   COMPARISON_PATH,
   COVERAGE_PATH,
+  COVERAGE_WAIVERS,
   EVIDENCE_GLOB_DIR,
   parseEvidenceRecord,
   PLAN_PATH,
+  PROTOCOL_SYSTEMS,
+  staleSystemWaivers,
+  unwaivedCoverageGaps,
 } from "../src/protocolStatus.js";
 
 const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -108,6 +112,53 @@ describe("protocol status views", () => {
     const complete = buildMeasurementPlanMarkdown([perplexity, chatgpt], { seriesDays: 1 });
     expect(complete).not.toContain("sind noch nicht gemessen");
     expect(complete).toContain("Alle 1 geplanten Tage sind abgedeckt.");
+  });
+
+  it("leaves no planned system uncovered without a recorded reason", () => {
+    const records = [perplexity, chatgpt];
+    // Duck.ai has no record, so this only passes because a reasoned waiver covers it.
+    expect(unwaivedCoverageGaps(records)).toEqual([]);
+    expect(staleSystemWaivers(records)).toEqual([]);
+
+    const coverage = buildCoverageMarkdown(records, { seriesDays: 7 });
+    expect(coverage).toContain("**Duck.ai:** kein Rohbeleg vorhanden — bewusst offen:");
+    expect(coverage).toContain("ohne Rohbeleg eingeplant und begründet");
+    expect(coverage).not.toContain("Offene Lücken ohne Begründung");
+  });
+
+  it("fails on a planned system that is neither measured nor waived", () => {
+    const records = [perplexity, chatgpt];
+    // A newly planned system is a hard gap until it has a record or a reasoned waiver.
+    expect(
+      unwaivedCoverageGaps(records, { systems: [...PROTOCOL_SYSTEMS, "Copilot"] }),
+    ).toEqual(["Copilot"]);
+
+    // A waiver without a reason does not count as one.
+    expect(
+      unwaivedCoverageGaps(records, {
+        systems: ["Duck.ai"],
+        waivers: [{ system: "Duck.ai", reason: "   " }],
+      }),
+    ).toEqual(["Duck.ai"]);
+    expect(
+      unwaivedCoverageGaps(records, {
+        systems: ["Duck.ai"],
+        waivers: [{ system: "Duck.ai", reason: "Chat ohne Verlaufslink" }],
+      }),
+    ).toEqual([]);
+
+    // A waiver must not outlive the gap it covered.
+    expect(staleSystemWaivers(records, [{ system: "Perplexity", reason: "x" }])).toEqual([
+      "Perplexity",
+    ]);
+  });
+
+  it("keeps the shipped waivers meaningful", () => {
+    expect(COVERAGE_WAIVERS.length).toBeGreaterThan(0);
+    for (const waiver of COVERAGE_WAIVERS) {
+      expect(PROTOCOL_SYSTEMS as readonly string[]).toContain(waiver.system);
+      expect(waiver.reason.trim().length).toBeGreaterThan(20);
+    }
   });
 
   it("pins the generated views to the committed files", () => {

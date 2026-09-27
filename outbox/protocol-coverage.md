@@ -12,7 +12,7 @@
 ## Systeme
 
 - **Perplexity:** 1 Beleg an 1 Tag (2026-09-27) — anonym geprüft.
-- **Duck.ai:** kein Rohbeleg vorhanden — der Lauf ist nur als Zusammenfassung im Bericht dokumentiert.
+- **Duck.ai:** kein Rohbeleg vorhanden — bewusst offen: der anonyme Chat hatte keinen Verlaufslink und ist nach dem Schließen nicht abrufbar; vorhanden ist nur die Zusammenfassung im Pilotbericht
 - **ChatGPT:** 1 Beleg an 1 Tag (2026-09-27) — kein anonymer Lauf.
 
 ## Geplante Serie (7 Tage ab 2026-09-27)
@@ -35,3 +35,4 @@
 - `2026-09-27-chatgpt-run1.md`: Antwort-URL fehlt (der Lauf ist nicht per Link nachprüfbar).
 - `2026-09-27-chatgpt-run1.md`: Anonymität fehlt (der Lauf lief in einer bestehenden angemeldeten Sitzung).
 - `2026-09-27-perplexity-run1.md`: Modelllabel fehlt (das Produkt zeigte kein Modelllabel an).
+- **Duck.ai:** ohne Rohbeleg eingeplant und begründet — der anonyme Chat hatte keinen Verlaufslink und ist nach dem Schließen nicht abrufbar; vorhanden ist nur die Zusammenfassung im Pilotbericht

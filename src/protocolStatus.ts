@@ -16,6 +16,73 @@ export const EVIDENCE_GLOB_DIR = "outbox/evidence";
  */
 export const PROTOCOL_SYSTEMS = ["Perplexity", "Duck.ai", "ChatGPT"] as const;
 
+/** A planned system without a raw record, and the reason that gap is accepted. */
+export interface SystemWaiver {
+  system: string;
+  reason: string;
+}
+
+/**
+ * Planned systems whose missing record is accepted on purpose. A waiver must give a reason to
+ * count, and it must not outlive its gap: once the system has a record, the waiver has to go.
+ */
+export const COVERAGE_WAIVERS: readonly SystemWaiver[] = [
+  {
+    system: "Duck.ai",
+    reason:
+      "der anonyme Chat hatte keinen Verlaufslink und ist nach dem Schließen nicht abrufbar; vorhanden ist nur die Zusammenfassung im Pilotbericht",
+  },
+];
+
+export interface CoverageGap {
+  system: string;
+  waived: boolean;
+  reason?: string;
+}
+
+function hasRecord(records: EvidenceRecord[], system: string): boolean {
+  return records.some((record) => record.system === system);
+}
+
+/** Planned systems without a record, each with the waiver that covers it, if any. */
+export function coverageGaps(
+  records: EvidenceRecord[],
+  options: { systems?: readonly string[]; waivers?: readonly SystemWaiver[] } = {},
+): CoverageGap[] {
+  const systems = options.systems ?? PROTOCOL_SYSTEMS;
+  const waivers = options.waivers ?? COVERAGE_WAIVERS;
+  return systems
+    .filter((system) => !hasRecord(records, system))
+    .map((system) => {
+      const waiver = waivers.find(
+        (entry) => entry.system === system && entry.reason.trim().length > 0,
+      );
+      return {
+        system,
+        waived: waiver !== undefined,
+        ...(waiver ? { reason: waiver.reason.trim() } : {}),
+      };
+    });
+}
+
+/** Gaps nobody accepted on purpose. Empty is the expected state of the protocol. */
+export function unwaivedCoverageGaps(
+  records: EvidenceRecord[],
+  options: { systems?: readonly string[]; waivers?: readonly SystemWaiver[] } = {},
+): string[] {
+  return coverageGaps(records, options)
+    .filter((gap) => !gap.waived)
+    .map((gap) => gap.system);
+}
+
+/** Waivers whose system now has a record; such a waiver has to be removed. */
+export function staleSystemWaivers(
+  records: EvidenceRecord[],
+  waivers: readonly SystemWaiver[] = COVERAGE_WAIVERS,
+): string[] {
+  return waivers.filter((waiver) => hasRecord(records, waiver.system)).map((waiver) => waiver.system);
+}
+
 export const COVERAGE_PATH = "outbox/protocol-coverage.md";
 export const COMPARISON_PATH = "outbox/protocol-comparison.md";
 export const PLAN_PATH = "outbox/messplan-hotel-victoria.md";
@@ -199,8 +266,13 @@ export function buildCoverageMarkdown(
   for (const system of plannedSystems) {
     const forSystem = sorted.filter((record) => record.system === system);
     if (forSystem.length === 0) {
+      const waiver = COVERAGE_WAIVERS.find(
+        (entry) => entry.system === system && entry.reason.trim().length > 0,
+      );
       lines.push(
-        `- **${system}:** kein Rohbeleg vorhanden — der Lauf ist nur als Zusammenfassung im Bericht dokumentiert.`,
+        waiver
+          ? `- **${system}:** kein Rohbeleg vorhanden — bewusst offen: ${waiver.reason.trim()}`
+          : `- **${system}:** kein Rohbeleg vorhanden — offene Lücke ohne Begründung.`,
       );
       continue;
     }
@@ -267,6 +339,14 @@ export function buildCoverageMarkdown(
     }
     for (const record of sorted.filter((entry) => entry.waiver)) {
       lines.push(`- \`${record.file}\`: bewusst unvollständig aufgenommen — ${record.waiver}`);
+    }
+    const acknowledged = coverageGaps(sorted).filter((gap) => gap.waived);
+    for (const gap of acknowledged) {
+      lines.push(`- **${gap.system}:** ohne Rohbeleg eingeplant und begründet — ${gap.reason}`);
+    }
+    const openGaps = unwaivedCoverageGaps(sorted);
+    if (openGaps.length > 0) {
+      lines.push(`- **Offene Lücken ohne Begründung:** ${openGaps.join(", ")}.`);
     }
     lines.push("");
   }
@@ -403,12 +483,11 @@ export function buildMeasurementPlanMarkdown(
       `- ${plural(sorted.length, "Beleg", "Belege")} von ${plural(seriesDays, "geplantem Tag", "geplanten Tagen")}: In ${mentioning.length} von ${sorted.length} Antworten wird Ihr Haus genannt.`,
     );
   }
-  const uncovered = plannedSystems.filter(
-    (system) => !sorted.some((record) => record.system === system),
-  );
-  for (const system of uncovered) {
+  for (const gap of coverageGaps(sorted)) {
     lines.push(
-      `- Für **${system}** gibt es keinen Rohbeleg; der Lauf liegt nur als Zusammenfassung vor und ist nicht neu prüfbar.`,
+      gap.waived
+        ? `- Für **${gap.system}** gibt es keinen Rohbeleg (bewusst offen: ${gap.reason}); der Lauf ist damit nicht neu prüfbar.`
+        : `- Für **${gap.system}** gibt es keinen Rohbeleg und keine Begründung; der Lauf ist nicht neu prüfbar.`,
     );
   }
   lines.push("");
