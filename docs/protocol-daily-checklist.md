@@ -90,6 +90,57 @@ Kommt stattdessen „Beleg abgelehnt …“, fehlt ein Pflichtfeld — dann grei
 
 Beide Wege halten den Unterschied zwischen „nicht vorhanden“ und „vergessen“ fest.
 
+### Der ganze Tag in einem Aufruf
+
+Statt drei einzelner `record:run`-Aufrufe lässt sich der Tag als **Tagesschein** beschreiben und in einem Aufruf fahren. Das Auslesen der drei Läufe bleibt Handarbeit, alles danach nicht mehr:
+
+```json
+{
+  "date": "2026-09-28",
+  "systems": [
+    {
+      "system": "Perplexity",
+      "answer": "answers/perplexity.txt",
+      "time": "20:49 laut Antwortseite (Europe/Berlin)",
+      "model": "nicht angezeigt",
+      "mode": "anonymer Chat, geteilte Sitzung",
+      "ranking": ["Haus A", "Haus B", "Haus C"],
+      "url": "https://www.perplexity.ai/search/…",
+      "sourcePanel": "25 Quellen",
+      "sources": ["https://www.hotelvictoria.de/"]
+    },
+    {
+      "system": "Duck.ai",
+      "answer": "answers/duck-ai.txt",
+      "time": "22:15",
+      "model": "GPT-5.6 Luna",
+      "mode": "anonymer Chat",
+      "ranking": ["Haus B", "Haus C", "Haus D"]
+    },
+    {
+      "system": "ChatGPT",
+      "answer": "answers/chatgpt.txt",
+      "time": "21:28",
+      "model": "ChatGPT",
+      "mode": "angemeldete Sitzung, temporärer Chat",
+      "ranking": ["Haus A", "Haus C", "Haus D"]
+    }
+  ]
+}
+```
+
+```bash
+npm run measure:day -- --day answers/2026-09-28.json --dry-run   # nur prüfen, nichts schreiben
+npm run measure:day -- --day answers/2026-09-28.json             # schreiben, Ableitungen, Tests
+```
+
+Regeln des Tagesscheins:
+
+- Er nennt **alle drei** Systeme — als Lauf oder mit `"skip": "<Grund>"`. Ohne Begründung wird der Tag abgewiesen; ein begründet ausgelassenes System bleibt als Lücke in der Abdeckung stehen.
+- Ein Lauf ohne Pflichtfeld wird abgelehnt; bewusst annehmen nur mit `"waiver": "<Grund>"`.
+- Ein System, das nicht im Protokoll steht, wird abgewiesen.
+- Der Trockenlauf schreibt nichts und erzeugt keine Ableitungen — er prüft aber jeden Beleg mit demselben Parser, den die Ableitungen nutzen.
+
 ## 2. Ableitungen neu erzeugen
 
 ```bash
