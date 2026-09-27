@@ -59,6 +59,7 @@ Es wird ausschließlich Ansatz 1 für diesen Meilenstein spezifiziert.
 - Eine nicht erreichbare oder nicht eindeutige Quelle wird nicht als Fakt übernommen; der betreffende Punkt bleibt offen bzw. „nicht geprüft“.
 - Widersprüchliche Seiteninhalte werden als Unsicherheit dokumentiert oder nicht verwendet.
 - Eine manuelle Prüfung darf keine Authentisierung, Umgehung einer Zugriffskontrolle oder Belastung der Website erfordern. Falls das der Fall wäre, wird die Prüfung gestoppt und der Punkt als ungeprüft markiert.
+- **Benannte Ausnahme (27.09.2026, ChatGPT):** Für den dritten Testlauf verlangte chatgpt.com eine Anmeldung. Es wurde keine Zugriffskontrolle umgangen, kein Zugangsdatum eingegeben und keine Paywall umgangen; genutzt wurde ausschließlich die im Standardprofil bereits bestehende Sitzung des Betreibers, in einem temporären Chat ohne Verlauf. Der Lauf ist im Bericht ausdrücklich als **nicht anonym** gekennzeichnet und wird nicht mit den anonymen Läufen gleichgesetzt. Ohne eine solche bestehende Sitzung bleibt der Punkt „nicht geprüft“ — die Ausnahme begründet keine Zugangsbeschaffung für künftige Läufe.
 
 ## Abnahmekriterien
 

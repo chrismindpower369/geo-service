@@ -7,7 +7,8 @@
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
     "render:report": "node --experimental-strip-types --no-warnings scripts/render-pilot-report.ts",
-    "record:run": "node --experimental-strip-types --no-warnings scripts/record-citation-run.ts"
+    "record:run": "node --experimental-strip-types --no-warnings scripts/record-citation-run.ts",
+    "render:status": "node --experimental-strip-types --no-warnings scripts/render-protocol-status.ts"
   },
   "devDependencies": {
     "@types/node": "^26.6.3",
