@@ -20,7 +20,7 @@ Es wird ausschließlich Ansatz 1 für diesen Meilenstein spezifiziert.
 
 ## Umfang des Piloten
 
-- Einen belegten, einseitigen Beispielbericht für Hotel VICTORIA Nürnberg im bereits bestehenden Pfad `outbox/reports/hotel-victoria-nuernberg.md` erstellen bzw. ersetzen.
+- Einen belegten, einseitigen Beispielbericht für Hotel VICTORIA Nürnberg im bereits bestehenden Pfad `outbox/reports/hotel-victoria.md` erstellen bzw. ersetzen.
 - Die offizielle Hotel-Website manuell abrufen und nur tatsächlich beobachtbare Website-Fakten berichten. Jeder Fakt erhält eine konkrete offizielle Quell-URL und ein Abrufdatum.
 - Beobachtung, Interpretation, Empfehlung und Hypothese optisch bzw. sprachlich unterscheiden.
 - Technische Beobachtungen dürfen sich auf direkt geprüfte Inhalte der öffentlichen Website beschränken, zum Beispiel sichtbare Unternehmens-/Eventinformationen oder tatsächlich vorgefundene strukturierte Daten. Eine nicht erfolgte Prüfung wird explizit als „nicht geprüft“ markiert.
@@ -35,7 +35,7 @@ Es wird ausschließlich Ansatz 1 für diesen Meilenstein spezifiziert.
 3. `tests/outbox.test.ts` wird so angepasst, dass der manuelle Hotel-Pilot von den vier weiterhin rein simulierten Berichten unterschieden und auf Quellen-/Abrufhinweise sowie Kennzeichnung ungeprüfter Aussagen geprüft wird.
 4. `SUMMARY.md` wird angepasst, damit die Abgrenzung zwischen einem belegten Beispiel-Pilot und vier Simulationen transparent ist.
 
-**Änderungsumfang:** `outbox/reports/hotel-victoria-nuernberg.md`, `tests/outbox.test.ts` und `SUMMARY.md`.
+**Änderungsumfang:** `outbox/reports/hotel-victoria.md`, `tests/outbox.test.ts` und `SUMMARY.md`.
 
 ## Explizit nicht im Umfang
 
@@ -76,6 +76,16 @@ Es wird ausschließlich Ansatz 1 für diesen Meilenstein spezifiziert.
 - `npm test`: Report-Datei und Statuskennzeichnung für genau den einen Pilotbericht prüfen, Quellen-/Abrufhinweise voraussetzen und sicherstellen, dass die vier übrigen Leads weiter explizite Simulationen referenzieren.
 - `npm run typecheck`: regressionsfreie Typprüfung des bestehenden Projekts.
 - Manuelle Review: Bericht gegen die verlinkten offiziellen Quellen querprüfen und sicherstellen, dass keine ungemessene KI-Sichtbarkeit als Fakt erscheint.
+
+## Nachtrag 2026-09-27 (nach Umsetzung) – ersetzt die Abgrenzung oben, wo sie abweicht
+
+Bei der Umsetzung hat sich der Umfang erweitert. Damit Design und Code zusammenpassen, hält dieser Nachtrag den tatsächlichen Stand fest:
+
+1. **Report-Modell statt reiner Simulation.** `src/audit.ts` und `src/index.ts` wurden umgebaut: Prüfdaten tragen jetzt einen Status (`simulated`, `reviewed`, `needs-review`) und optionale `evidence`-Einträge; die vier übrigen Lead-Berichte sind Simulationsplatzhalter mit dem Vermerk „kein Sichtbarkeits-Audit“. Der Endpunkt `/api/audit/simulate` behält seinen bisherigen Vertrag (`mode: "simulation"`) und bleibt netzwerkfrei. Der Satz „Keine Änderung an Worker-Routen, `src/`, Audit-Engine oder Datenmodell“ ist damit **überholt**.
+2. **Ein Pilotbericht, wie im Design vorgesehen.** Der zusammengeführte Pilot liegt weiterhin unter `outbox/reports/hotel-victoria.md`; ein während der Umsetzung parallel entstandener zweiter Bericht wurde in diesen Pfad zusammengeführt.
+3. **KI-Einzelruns ausdrücklich dokumentiert.** Der Absatz „Direkte Erwähnungen … nur bei manuell erhobenen, reproduzierbar dokumentierten Ergebnissen“ und der Ausschluss „keine Live-Abfragen an KI- oder Suchdienste“ wurden in einem Punkt erweitert: Auf Weisung vom 2026-09-27 wurden zwei manuelle Einzelruns (Duck.ai und arena.ai) mit vier neutralen Fragen erfasst und im Bericht als **nicht reproduzierbare Momentaufnahme** gekennzeichnet; Ergebnis: die Nennung ist über zwei Systeme **nicht stabil**. Die Läufe ersetzen keine Messreihe, und Abnahmekriterium 3 bleibt in der Sache gültig (kein Anspruch auf Messung, kein Anspruch auf „Regelmäßigkeit“), wird aber nicht mehr durch „wird nicht abgefragt“ definiert.
+4. **Leads-Datenmodell.** `outbox/nuernberg-leads.json` trägt je Lead ein `status`-Feld und für den Piloten zusätzlich `auditScope`.
+5. **Unverändert gültig:** kein E-Mail-Versand, keine Kontaktaufnahme, kein Deployment, kein Commit, kein Scanner, kein Crawling; die manuelle, lesende Prüfung offizieller Seiten bleibt die Evidenzgrundlage.
 
 ## Entscheidungspunkte nach der Pilotvalidierung
 

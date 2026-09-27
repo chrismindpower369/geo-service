@@ -1,0 +1,92 @@
+[
+  {
+    "id": "baecker-feihl",
+    "name": "Der Bäcker Feihl",
+    "industry": "Bäckerei und regionale Lebensmittelversorgung",
+    "location": "Nürnberg-Region (Hauptsitz Neumarkt)",
+    "address": "Am Kornfeld 4, D-92318 Neumarkt",
+    "website": "https://baecker-feihl.de/",
+    "publicContactEmail": "info@baecker-feihl.de",
+    "publicPhone": "+49 9181 46405-0",
+    "fitNote": "Die offizielle B2B-Seite nennt Lieferungen an Restaurants, Cafés, Supermärkte und Hotels in der Region Neumarkt, Nürnberg, Fürth und Roth.",
+    "sources": [
+      "https://baecker-feihl.de/b2b/",
+      "https://baecker-feihl.de/kontakt/"
+    ],
+    "probeAuditReport": "reports/baecker-feihl.md",
+    "status": "simulated"
+  },
+  {
+    "id": "baeckerei-christian-albert",
+    "name": "Bäckerei Christian Albert",
+    "industry": "Handwerksbäckerei",
+    "location": "Nürnberg",
+    "address": "Parkstraße 10, 90409 Nürnberg",
+    "website": "https://baeckerei-albert.de/",
+    "publicContactEmail": "chef@baeckerei-albert.de",
+    "publicPhone": "+49 911 352916",
+    "fitNote": "Die offizielle Website beschreibt den Nürnberger Handwerksbetrieb; eine Seite für Wiederverkäufer ist ebenfalls vorhanden.",
+    "sources": [
+      "https://baeckerei-albert.de/Kontakt/",
+      "https://baeckerei-albert.de/Fuer-Wiederverkaeufer/"
+    ],
+    "probeAuditReport": "reports/baeckerei-christian-albert.md",
+    "status": "simulated"
+  },
+  {
+    "id": "zahnarztpraxis-dr-miriam-fischer",
+    "name": "Zahnarztpraxis Dr. Miriam Fischer",
+    "industry": "Zahnmedizin",
+    "location": "Nürnberg-Nordstadt",
+    "address": "Schleifweg 25, Gebäude C, 90409 Nürnberg",
+    "website": "https://www.zahnarztpraxis-drfischer.de/",
+    "publicContactEmail": "hallo@dr-miriam-fischer.de",
+    "publicPhone": "+49 911 37748222",
+    "fitNote": "Die Praxis-Website beschreibt die Nürnberger Praxis und ihre Fachbereiche; Kontaktdaten stehen im Impressum.",
+    "sources": [
+      "https://www.zahnarztpraxis-drfischer.de/",
+      "https://www.zahnarztpraxis-drfischer.de/impressum"
+    ],
+    "probeAuditReport": "reports/zahnarztpraxis-dr-miriam-fischer.md",
+    "status": "simulated"
+  },
+  {
+    "id": "art-business-hotel",
+    "name": "art & business hotel Nürnberg",
+    "industry": "Hotel und Geschäftsreisen",
+    "location": "Nürnberg",
+    "address": "Gleißbühlstraße 15, 90402 Nürnberg",
+    "website": "https://www.art-business-hotel.com/",
+    "publicContactEmail": "info@art-business-hotel.com",
+    "publicPhone": "+49 911 2321-0",
+    "fitNote": "Die offizielle Website positioniert das Haus als Business-Hotel und nennt seine zentrale Lage nahe Hauptbahnhof und Messe.",
+    "sources": [
+      "https://www.art-business-hotel.com/",
+      "https://www.art-business-hotel.com/impressum/"
+    ],
+    "probeAuditReport": "reports/art-business-hotel-nuernberg.md",
+    "status": "simulated"
+  },
+  {
+    "id": "hotel-victoria-nuernberg",
+    "name": "Hotel VICTORIA Nürnberg",
+    "industry": "Hotel, Tagungen und Veranstaltungen",
+    "location": "Nürnberg-Altstadt",
+    "address": "Königstraße 80, 90402 Nürnberg",
+    "website": "https://www.hotelvictoria.de/",
+    "publicContactEmail": "book@hotelvictoria.de",
+    "publicPhone": "+49 911 2405-0",
+    "sources": [
+      "https://www.hotelvictoria.de/",
+      "https://www.hotelvictoria.de/kontakt/impressum",
+      "https://www.hotelvictoria.de/en/contact/arrival-here",
+      "https://www.hotelvictoria.de/en/meeting/our-meeting-rooms",
+      "https://www.hotelvictoria.de/en/event/our-event-service",
+      "https://www.hotelvictoria.de/en/accommodation/our-rooms",
+      "https://www.hotelvictoria.de/en/boutique-hotel/a-z-information"
+    ],
+    "probeAuditReport": "reports/hotel-victoria.md",
+    "status": "reviewed",
+    "auditScope": "Official public website pages reviewed on 2026-09-27; AI citation claims remain unverified."
+  }
+]
