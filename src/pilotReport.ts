@@ -1,13 +1,16 @@
-import type { AuditCheckData, AuditReportData } from "./audit.js";
+import type { AuditCheckData, AuditReportData, AuditStage } from "./audit.js";
 
-export type { AuditCheckData, AuditReportData };
+export type { AuditCheckData, AuditReportData, AuditStage };
 
 /**
  * Single source of truth for the manually reviewed Hotel VICTORIA pilot report.
  *
- * `pilotAudit` carries the structured audit findings (stages, statuses, evidence URLs);
- * `buildPilotReportMarkdown()` renders the full Markdown document from these data plus
- * the verbatim JSON-LD proposal. `tests/pilotReport.test.ts` pins the rendered output
+ * `PILOT_AUDIT` carries the structured findings per stage (title, status, finding,
+ * recommendation, evidence) and the long-form narrative of each reviewed stage;
+ * `buildPilotReportMarkdown()` renders the whole document from that model plus the
+ * verbatim JSON-LD proposal — the numbered sections take their heading and body from the
+ * checks, so a changed or missing check changes (or breaks) the rendered report instead of
+ * leaving hand-written prose behind. `tests/pilotReport.test.ts` pins the output
  * byte-for-byte against `outbox/reports/hotel-victoria.md`, so data and file cannot drift.
  */
 
@@ -19,18 +22,10 @@ export const PILOT_META = {
   address: "Königstraße 80, 90402 Nürnberg",
   email: "book@hotelvictoria.de",
   reviewedOn: "27.09.2026",
-  status: "reviewed",
 } as const;
 
-export const PILOT_AUDIT: AuditReportData = {
-  companyName: PILOT_META.companyName,
-  website: PILOT_META.website,
-  industry: PILOT_META.industry,
-  location: PILOT_META.location,
-  generatedAt: "2026-09-27",
-  status: "reviewed",
-  mode: "simulation",
-  checks: [
+/** The three audited stages; each reviewed stage gets its narrative attached below. */
+const PILOT_CHECKS: AuditCheckData[] = [
     {
       stage: "direct-mention",
       title: "Direkte Nennung und Zitation durch KI-Systeme",
@@ -49,7 +44,7 @@ export const PILOT_AUDIT: AuditReportData = {
     },
     {
       stage: "competitors",
-      title: "Mitbewerber",
+      title: "Mitbewerber (nicht Teil dieses Piloten)",
       status: "needs-review",
       finding: "Keine Mitbewerberrecherche durchgeführt; nicht Teil dieses Piloten.",
       recommendation:
@@ -81,10 +76,7 @@ export const PILOT_AUDIT: AuditReportData = {
         "https://developers.google.com/search/docs/appearance/structured-data/sd-policies",
       ],
     },
-  ],
-  disclaimer:
-    "Dieser Report ist ein belegter manueller Website-/Schema-Pilot, aber kein vollständiger KI-Zitierungsnachweis, kein Ranking-Audit und keine Erfolgszusage.",
-};
+];
 
 /** Verbatim Schema.org JSON-LD proposal embedded in section 4 of the report. */
 export const PILOT_JSON_LD_SCRIPT = `<script type="application/ld+json">
@@ -230,6 +222,8 @@ const BESTANDSAUFNAHME = `Beobachtet an der Startseite \`https://www.hotelvictor
 
 **Interpretation:** Die Startseite hat bereits strukturierte Unternehmensdaten; die zusätzlichen, sichtbaren Angebots- und Ausstattungsinformationen könnten semantisch weiter verknüpft werden. Aus dieser Bestandsaufnahme folgt weder ein Rankingmangel noch ein nachgewiesener Informationsverlust in einem bestimmten KI-Modell.`;
 
+const MITBEWERBER = `Eine systematische Mitbewerberrecherche war nicht Teil dieses Piloten. Die Häuser, die die beiden Testläufe zusätzlich nannten — Hotel Drei Raben, Hotel Elch Boutique, Leonardo Royal Hotel Nürnberg, Scandic Nürnberg Central und Le Méridien Grand Hotel Nürnberg — stammen aus zwei Antworten und sind keine geprüften Mitbewerberaussagen.`;
+
 const VORSCHLAG_EINLEITUNG = `Der folgende selbstständige Block ist syntaktisch gültiges JSON-LD und verwendet Schema.org-Typen/Eigenschaften. Er ist ein **Einbauvorschlag**, keine Aussage über bereits bestehendes Markup. Vor Veröffentlichung sollte das Hotel die sichtbaren Fakten und laufend veränderliche Preise/Angebote bestätigen. Der Vorschlag enthält bewusst keine erfundenen Sterne-Bewertungen, Zimmergrößen/-belegungen, exakten Übernachtungspreise oder konkreten Verfügbarkeiten.`;
 
 const VORSCHLAG_HINWEISE = `- **Schema-Vokabular:** Typen und Properties (u. a. \`Hotel\`, \`PostalAddress\`, \`LocationFeatureSpecification\`, \`HotelRoom\`, \`containsPlace\`, \`Offer\`, \`Service\` und \`makesOffer\`) wurden gegen die offiziellen Schema.org-Seiten geprüft.
@@ -259,48 +253,95 @@ const QUELLEN = `- Perplexity-Antwort (Durchlauf 1, 20:49): https://www.perplexi
 - Schema.org makesOffer und Offer: https://schema.org/makesOffer · https://schema.org/Offer
 - Google-Richtlinien für strukturierte Daten: https://developers.google.com/search/docs/appearance/structured-data/sd-policies`;
 
-/** Render the full pilot report Markdown from the data above. */
-export function buildPilotReportMarkdown(): string {
-  return `# GEO-Pilot-Audit: ${PILOT_META.companyName}
+/** Long-form narrative per audited stage: the body a rendered report shows for that stage. */
+const PILOT_NARRATIVE: Record<AuditStage, string> = {
+  "direct-mention": DIREKTE_NENNUNG,
+  competitors: MITBEWERBER,
+  "technical-readiness": BESTANDSAUFNAHME,
+};
 
-**Status:** \`${PILOT_META.status}\` — manuelle Prüfung offizieller öffentlicher Website-Seiten am **${PILOT_META.reviewedOn}**. Dies ist kein automatisierter oder vollständiger GEO-Audit.
+/**
+ * The manually reviewed pilot audit. It is the model the report renders from: every check
+ * carries its own narrative, so prose, headings and structured findings cannot drift apart.
+ */
+export const PILOT_AUDIT: AuditReportData = {
+  companyName: PILOT_META.companyName,
+  website: PILOT_META.website,
+  industry: PILOT_META.industry,
+  location: PILOT_META.location,
+  generatedAt: "2026-09-27",
+  status: "reviewed",
+  mode: "simulation",
+  checks: PILOT_CHECKS.map((check) => ({ ...check, details: PILOT_NARRATIVE[check.stage] })),
+  disclaimer:
+    "Dieser Report ist ein belegter manueller Website-/Schema-Pilot, aber kein vollständiger KI-Zitierungsnachweis, kein Ranking-Audit und keine Erfolgszusage.",
+};
 
-## Kurzbefund
+interface PilotSection {
+  heading: string;
+  body: string;
+}
 
-${KURZBEFUND}
+/** A reviewed stage, with its narrative narrowed to a definite string for rendering. */
+function requireCheck(
+  audit: AuditReportData,
+  stage: AuditStage,
+): AuditCheckData & { details: string } {
+  const check = audit.checks.find((candidate) => candidate.stage === stage);
+  if (!check?.details) {
+    throw new Error(`pilot report needs the "${stage}" check with its narrative attached`);
+  }
+  return { ...check, details: check.details };
+}
 
-## 1. Unternehmens- und Standortdaten
+/**
+ * The document as data. Numbered audit sections take heading and body from the audit model;
+ * the remaining prose blocks are data too, so the structure is not buried in a template.
+ */
+function buildPilotSections(audit: AuditReportData): PilotSection[] {
+  const directMention = requireCheck(audit, "direct-mention");
+  const competitors = requireCheck(audit, "competitors");
+  const technical = requireCheck(audit, "technical-readiness");
 
-${UNTERNEHMEN}
+  return [
+    { heading: "Kurzbefund", body: KURZBEFUND },
+    { heading: "1. Unternehmens- und Standortdaten", body: UNTERNEHMEN },
+    {
+      heading: `2. ${directMention.title}`,
+      body: [directMention.details, `### ${competitors.title}`, competitors.details].join("\n\n"),
+    },
+    { heading: `3. ${technical.title}`, body: technical.details },
+    {
+      heading: "4. Vorschlag: zusätzliches Schema.org JSON-LD für die Startseite",
+      body: [
+        VORSCHLAG_EINLEITUNG,
+        "",
+        "```html",
+        PILOT_JSON_LD_SCRIPT,
+        "```",
+        "",
+        "### Validierungsstatus und Implementierungshinweise",
+        "",
+        VORSCHLAG_HINWEISE,
+      ].join("\n"),
+    },
+    { heading: "5. Empfehlungen", body: EMPFEHLUNGEN },
+    { heading: "Quellen (offizielle Website und Schema.org)", body: QUELLEN },
+  ];
+}
 
-## 2. Direkte Nennung und Zitation durch KI-Systeme
+/** Render the full pilot report Markdown from the audit model and its narrative. */
+export function buildPilotReportMarkdown(audit: AuditReportData = PILOT_AUDIT): string {
+  const sections = buildPilotSections(audit)
+    .map(({ heading, body }) => `## ${heading}\n\n${body}`)
+    .join("\n\n");
 
-${DIREKTE_NENNUNG}
+  return `# GEO-Pilot-Audit: ${audit.companyName}
 
-## 3. Technische Bestandsaufnahme
+**Status:** \`${audit.status}\` — manuelle Prüfung offizieller öffentlicher Website-Seiten am **${PILOT_META.reviewedOn}**. Dies ist kein automatisierter oder vollständiger GEO-Audit.
 
-${BESTANDSAUFNAHME}
+${sections}
 
-## 4. Vorschlag: zusätzliches Schema.org JSON-LD für die Startseite
-
-${VORSCHLAG_EINLEITUNG}
-
-\`\`\`html
-${PILOT_JSON_LD_SCRIPT}
-\`\`\`
-
-### Validierungsstatus und Implementierungshinweise
-
-${VORSCHLAG_HINWEISE}
-
-## 5. Empfehlungen
-
-${EMPFEHLUNGEN}
-
-## Quellen (offizielle Website und Schema.org)
-
-${QUELLEN}
-
-> **Keine E-Mail wurde versendet.** ${PILOT_AUDIT.disclaimer}
+> **Keine E-Mail wurde versendet.** ${audit.disclaimer}
 `;
 }

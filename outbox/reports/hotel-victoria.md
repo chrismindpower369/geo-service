@@ -42,6 +42,10 @@ Die offizielle Ankunftsseite verortet das Hotel am Eingang zur Altstadt, gegenü
 - ChatGPT wurde **nicht geprüft**: chatgpt.com verlangt im geteilten Browser eine Anmeldung; es wurde kein Login durchgeführt und keine Antwort unterstellt.
 - Die Nennung bei Perplexity stützt sich u. a. auf die eigene Website des Hotels („bezeichnet sich selbst ausdrücklich als Tagungshotel“) — das stützt den technischen Hebel aus Abschnitt 4 (vollständige, strukturierte Angebotsdaten), ist aber kein Wirkungsnachweis des JSON-LD-Vorschlags.
 
+### Mitbewerber (nicht Teil dieses Piloten)
+
+Eine systematische Mitbewerberrecherche war nicht Teil dieses Piloten. Die Häuser, die die beiden Testläufe zusätzlich nannten — Hotel Drei Raben, Hotel Elch Boutique, Leonardo Royal Hotel Nürnberg, Scandic Nürnberg Central und Le Méridien Grand Hotel Nürnberg — stammen aus zwei Antworten und sind keine geprüften Mitbewerberaussagen.
+
 ## 3. Technische Bestandsaufnahme
 
 Beobachtet an der Startseite `https://www.hotelvictoria.de/` im Browser am 27.09.2026:
