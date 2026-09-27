@@ -13,6 +13,19 @@ export const NEUTRAL_PROMPT =
 export const EVIDENCE_DIR = "outbox/evidence";
 export const PILOT_REPORT_PATH = "outbox/reports/hotel-victoria.md";
 
+/**
+ * The fields a record must state to be usable in a series. Each may be filled with a
+ * documented absence ("nicht angezeigt", "keine Uhrzeit angezeigt") — the point is that the
+ * reader decided, instead of forgetting. A deliberate gap needs a waiver, which is part of
+ * the record from then on.
+ */
+export const PROTOCOL_FIELD_LABELS = {
+  time: "Datum/Zeit",
+  mode: "Sitzungsart",
+  model: "Modelllabel",
+  ranking: "Reihenfolge der genannten Häuser",
+} as const;
+
 export interface CitationRunInput {
   /** Local date of the run, `YYYY-MM-DD`. */
   date: string;
@@ -21,7 +34,7 @@ export interface CitationRunInput {
   /** Product name as shown to the user, e.g. "ChatGPT". */
   system: string;
   /** The verbatim answer text, exactly as the page rendered it. */
-  answer: string;
+  answer?: string;
   /** The prompt that was submitted, identical across systems. */
   prompt: string;
   /** Local time as shown by the product, e.g. "20:49 (Europe/Berlin)". */
@@ -45,6 +58,23 @@ export interface CitationRunInput {
   ranking?: string[];
   /** Extra reading notes, e.g. which page parts were chrome rather than answer. */
   notes?: string[];
+  /** Reason for recording an incomplete run on purpose; written into the record. */
+  waiver?: string;
+}
+
+/**
+ * Which protocol fields the draft does not state. The caller decides whether to refuse the
+ * record or to accept it with a waiver that names the reason.
+ */
+export function missingProtocolFields(input: CitationRunInput): string[] {
+  const missing: string[] = [];
+  if (!input.time?.trim()) missing.push(PROTOCOL_FIELD_LABELS.time);
+  if (!input.mode?.trim()) missing.push(PROTOCOL_FIELD_LABELS.mode);
+  if (!input.model?.trim()) missing.push(PROTOCOL_FIELD_LABELS.model);
+  if (!input.ranking || input.ranking.length === 0) {
+    missing.push(PROTOCOL_FIELD_LABELS.ranking);
+  }
+  return missing;
 }
 
 const UMLAUTS: Record<string, string> = { ä: "ae", ö: "oe", ü: "ue", ß: "ss" };
@@ -79,7 +109,7 @@ export function nextRunNumber(
 
 /** Render one run as a raw evidence record. The reader must be able to re-check it. */
 export function buildEvidenceMarkdown(input: CitationRunInput): string {
-  const answer = input.answer.trim();
+  const answer = (input.answer ?? "").trim();
   if (!answer) throw new Error("citation run needs the verbatim answer text");
   const prompt = input.prompt.trim();
   if (!prompt) throw new Error("citation run needs the prompt that was submitted");
@@ -104,6 +134,19 @@ export function buildEvidenceMarkdown(input: CitationRunInput): string {
   lines.push(
     `- **Erfassungsmethode:** ${input.method ?? "Auslesen des gerenderten Seitentexts während des Durchlaufs"}`,
   );
+  const missing = missingProtocolFields(input);
+  if (missing.length > 0) {
+    lines.push(
+      input.waiver
+        ? `- **Bewusst unvollständiger Beleg:** ${input.waiver} (fehlende Felder: ${missing.join(", ")})`
+        : `- **Unvollständiger Beleg:** fehlende Felder: ${missing.join(", ")} (keine Begründung angegeben)`,
+    );
+  }
+  if (prompt !== NEUTRAL_PROMPT) {
+    lines.push(
+      "- **Abweichender Prompt:** Dieser Lauf verwendet nicht die neutrale Standardfrage; er ist nicht direkt mit den übrigen Belegen vergleichbar.",
+    );
+  }
   const ranking = (input.ranking ?? []).map((entry) => entry.trim()).filter(Boolean);
   if (ranking.length > 0) {
     lines.push(`- **Reihenfolge der genannten Häuser:** ${ranking.join(" → ")}`);
