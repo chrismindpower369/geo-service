@@ -18,16 +18,15 @@
  * recorded text is exactly what the browser produced. Without `--run` the next free run
  * number for that date and system is used, so a series never overwrites a record.
  */
-import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
-import { dirname, join, resolve } from "node:path";
+import { mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   buildEvidenceMarkdown,
   EVIDENCE_DIR,
-  evidenceFileName,
   missingProtocolFields,
   NEUTRAL_PROMPT,
-  nextRunNumber,
+  planEvidenceTarget,
 } from "../src/citationRun.ts";
 
 const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -71,12 +70,16 @@ mkdirSync(outDir, { recursive: true });
 
 const existing = readdirSync(outDir);
 const explicitRun = Number.parseInt(flag("run") ?? "", 10);
-const run = Number.isInteger(explicitRun) ? explicitRun : nextRunNumber(existing, date, system);
-const target = join(outDir, evidenceFileName(date, system, run));
+const { run, path: target } = planEvidenceTarget({
+  dir: outDir,
+  date,
+  system,
+  existingFileNames: existing,
+  run: Number.isInteger(explicitRun) ? explicitRun : undefined,
+  force: process.argv.includes("--force"),
+});
 
-if (existsSync(target) && !process.argv.includes("--force")) {
-  throw new Error(`${target} already exists; pass --run or --force to replace it`);
-}const draft = {
+const draft = {
   date,
   run,
   system,

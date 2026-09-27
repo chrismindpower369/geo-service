@@ -4,8 +4,10 @@
  * One browse session per system and prompt produces one record under `outbox/evidence/`.
  * The record carries exactly what the browser showed — date, system, displayed model label,
  * session kind, the prompt, the verbatim answer and the cited URLs — so a series stays
- * checkable later. This module only formats; `scripts/record-citation-run.ts` writes the file.
+ * checkable later. This module only formats and plans; `scripts/record-citation-run.ts` and
+ * `scripts/measure-day.ts` do the writing.
  */
+import { join } from "node:path";
 
 export const NEUTRAL_PROMPT =
   "Empfiehl mir 3 charmante Tagungshotels / Boutique-Hotels direkt in der Nürnberger Altstadt/Hauptbahnhof.";
@@ -105,6 +107,31 @@ export function nextRunNumber(
     .map((name) => Number.parseInt(name.slice(prefix.length, -".md".length), 10))
     .filter((value) => Number.isInteger(value));
   return used.length === 0 ? 1 : Math.max(...used) + 1;
+}
+
+/**
+ * Where a record for one run belongs. Pure: an occupied file name is refused unless the
+ * caller forces it, so neither a single capture nor a whole measurement day can overwrite a
+ * record by accident.
+ */
+export function planEvidenceTarget(options: {
+  dir: string;
+  date: string;
+  system: string;
+  existingFileNames: string[];
+  run?: number;
+  force?: boolean;
+}): { run: number; fileName: string; path: string } {
+  const run =
+    options.run !== undefined && Number.isInteger(options.run)
+      ? options.run
+      : nextRunNumber(options.existingFileNames, options.date, options.system);
+  const fileName = evidenceFileName(options.date, options.system, run);
+  const path = join(options.dir, fileName);
+  if (options.existingFileNames.includes(fileName) && !options.force) {
+    throw new Error(`${path} already exists; pass --run or --force to replace it`);
+  }
+  return { run, fileName, path };
 }
 
 /** Render one run as a raw evidence record. The reader must be able to re-check it. */
