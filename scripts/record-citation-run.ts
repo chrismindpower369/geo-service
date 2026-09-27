@@ -9,6 +9,11 @@
  *     --ranking "Haus A; Haus B; Haus C" \
  *     --note "Kopfzeile und Folgefragen sind Seitengerüst."
  *
+ * A record is refused when `--time`, `--mode`, `--model` or `--ranking` is missing: a
+ * forgotten field would quietly weaken the series. State a documented absence instead
+ * ("nicht angezeigt"), or accept the gap on purpose with `--allow-incomplete "<Grund>"`,
+ * which is then written into the record.
+ *
  * The answer text comes from `--answer <file>` or stdin. This script queries nothing: the
  * recorded text is exactly what the browser produced. Without `--run` the next free run
  * number for that date and system is used, so a series never overwrites a record.
@@ -20,6 +25,7 @@ import {
   buildEvidenceMarkdown,
   EVIDENCE_DIR,
   evidenceFileName,
+  missingProtocolFields,
   NEUTRAL_PROMPT,
   nextRunNumber,
 } from "../src/citationRun.ts";
@@ -70,26 +76,44 @@ const target = join(outDir, evidenceFileName(date, system, run));
 
 if (existsSync(target) && !process.argv.includes("--force")) {
   throw new Error(`${target} already exists; pass --run or --force to replace it`);
-}
-
-const markdown = buildEvidenceMarkdown({
+}const draft = {
   date,
   run,
   system,
   prompt: flag("prompt") ?? NEUTRAL_PROMPT,
-  answer: readAnswer(),
   time: flag("time"),
   model: flag("model"),
   mode: flag("mode"),
   url: flag("url"),
-  method: flag("method"),      sourcePanel: flag("source-panel"),
-      sources: repeated("source"),
-      ranking: flag("ranking")
-        ?.split(";")
-        .map((entry) => entry.trim())
-        .filter(Boolean),
+  method: flag("method"),
+  sourcePanel: flag("source-panel"),
+  sources: repeated("source"),
+  ranking: flag("ranking")
+    ?.split(";")
+    .map((entry) => entry.trim())
+    .filter(Boolean),
   notes: repeated("note"),
-});
+  waiver: flag("allow-incomplete"),
+};
+
+// Validate before reading the answer, so a forgotten flag fails fast instead of after a paste.
+const missing = missingProtocolFields(draft);
+if (missing.length > 0 && !draft.waiver) {
+  console.error(
+    `Beleg abgelehnt: folgende Protokollfelder fehlen: ${missing.join(", ")}.`,
+  );
+  console.error(
+    'Entweder die Felder setzen (eine dokumentierte Absenz wie "nicht angezeigt" genügt) oder die Lücke bewusst annehmen: --allow-incomplete "<Grund>".',
+  );
+  process.exit(1);
+}
+if (missing.length > 0) {
+  console.warn(
+    `Warnung: bewusst unvollständiger Beleg — ${missing.join(", ")} fehlt (${draft.waiver}).`,
+  );
+}
+
+const markdown = buildEvidenceMarkdown({ ...draft, answer: readAnswer() });
 
 if (process.argv.includes("--dry-run")) {
   process.stdout.write(markdown);

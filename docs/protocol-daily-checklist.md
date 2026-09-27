@@ -49,6 +49,15 @@ npm run record:run -- \
 
 Die Laufnummern vergibt das Werkzeug selbst (`run1`, `run2`, … je Datum und System). `--run` nur setzen, wenn ein Beleg bewusst ersetzt wird — dann zusätzlich `--force`.
 
+### Wenn ein Feld fehlt: das Werkzeug lehnt den Beleg ab
+
+`--time`, `--mode`, `--model` und `--ranking` sind Pflicht. Fehlt eines, schreibt das Werkzeug nichts, sondern nennt die fehlenden Felder — damit kein vergessenes Feld die Serie unbemerkt schwächt. Zwei erlaubte Wege:
+
+- **Dokumentierte Absenz** statt Lücke: `--time "keine Uhrzeit angezeigt"`, `--model "nicht angezeigt"`. Das ist der Normalfall, wenn das Produkt die Angabe nicht zeigt.
+- **Bewusste Lücke** mit Begründung: `--allow-incomplete "die Antwort ergab keine erkennbare Reihenfolge"`. Der Beleg wird geschrieben und trägt diese Begründung sichtbar in sich; die Abdeckung listet das Feld weiterhin als fehlend.
+
+Beide Wege halten den Unterschied zwischen „nicht vorhanden“ und „vergessen“ fest.
+
 ## 2. Ableitungen neu erzeugen
 
 ```bash

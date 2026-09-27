@@ -37,6 +37,8 @@ export interface EvidenceRecord {
   sources: string[];
   /** Houses in the order the answer presented them, as recorded during the run. */
   ranking: string[];
+  /** Reason recorded when a run was accepted with protocol fields missing. */
+  waiver?: string;
   mentionsHotelVictoria: boolean;
   anonymous: boolean;
 }
@@ -97,6 +99,7 @@ export function parseEvidenceRecord(file: string, text: string): EvidenceRecord 
     answer,
     sources,
     ranking,
+    waiver: /^- \*\*Bewusst unvollständiger Beleg:\*\* (.+)$/m.exec(text)?.[1]?.trim(),
     mentionsHotelVictoria: /victoria/i.test(answer),
     anonymous: isAnonymous(mode),
   };
@@ -262,6 +265,9 @@ export function buildCoverageMarkdown(
     for (const gap of gaps) {
       lines.push(`- \`${gap.file}\`: ${gap.field} fehlt (${gap.reason}).`);
     }
+    for (const record of sorted.filter((entry) => entry.waiver)) {
+      lines.push(`- \`${record.file}\`: bewusst unvollständig aufgenommen — ${record.waiver}`);
+    }
     lines.push("");
   }
 
@@ -420,6 +426,9 @@ export function buildMeasurementPlanMarkdown(
   const gaps = sorted.flatMap((record) => recordGaps(record));
   for (const gap of gaps) {
     lines.push(`- \`${gap.file}\`: ${gap.field} fehlt (${gap.reason}).`);
+  }
+  for (const record of sorted.filter((entry) => entry.waiver)) {
+    lines.push(`- \`${record.file}\`: bewusst unvollständig aufgenommen — ${record.waiver}`);
   }
   lines.push("");
   lines.push("## Was diese Messung nicht ist");
