@@ -13,12 +13,12 @@ Für das Hotel VICTORIA Nürnberg liegt ein manuell recherchierter, quellenbeleg
 - Jede Sachangabe nennt ihre offizielle Quelle (Impressum, Ankunfts-, Zimmer-, Meeting-, Event- und A–Z-Seite), gelesen am 27.09.2026.
 - Die Startseite trägt `Hotel`-Microdata (Adresse, Telefon, Preisbereich, Bewertung) und in der untersuchten Ansicht **kein** JSON-LD-Script; Angebots- und Ausstattungsdaten liegen sichtbar auf eigenen Unterseiten.
 - Der JSON-LD-Vorschlag ist syntaktisch gültiges JSON und wird im Test geparst; die verwendeten Schema.org-Typen wurden gegen die offiziellen Seiten geprüft.
-- Abschnitt 2 des Berichts protokolliert drei dokumentierte Testläufe mit identischem, neutralem Prompt (Datum, System, wörtliche Antwort, Zitat-URLs); der vollständige Antworttext zweier Läufe liegt als Rohbeleg in `outbox/evidence/`.
+- Abschnitt 2 des Berichts protokolliert vier dokumentierte Testläufe in drei Systemen mit identischem, neutralem Prompt (Datum, System, wörtliche Antwort, Zitat-URLs); für alle drei Systeme liegt der vollständige Antworttext als Rohbeleg in `outbox/evidence/`.
 
 **Ausdrücklich nicht belegt:**
 
 - Kein Ranking-Audit und kein Gesamtscore.
-- Keine Aussage, dass das Haus „regelmäßig“ in KI-Empfehlungen erscheint. Drei Läufe an einem Tag sind eine Momentaufnahme, keine Messreihe; die Behauptung aus dem Review-Brief bleibt damit **nicht verifiziert**.
+- Keine Aussage, dass das Haus „regelmäßig“ in KI-Empfehlungen erscheint. Vier Läufe an einem Tag sind eine Momentaufnahme, keine Messreihe; die Behauptung aus dem Review-Brief bleibt damit **nicht verifiziert**.
 - Keine Zusage zu Rich Results, Sichtbarkeit oder besseren KI-Antworten durch den JSON-LD-Einbau – der Block ist ein Vorschlag.
 - Kein Nachweis zeitlicher Stabilität und keine Auswertung über mehrere Tage oder Systeme.
 - Die vier übrigen Lead-Berichte sind Platzhalter mit Status `simulated`; sie wurden nie live geprüft.

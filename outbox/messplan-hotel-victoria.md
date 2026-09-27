@@ -13,10 +13,10 @@
 | Tag | System | Ihr Haus genannt | Position in der Antwort |
 | --- | --- | --- | --- |
 | 2026-09-27 | ChatGPT | ja | Hotel VICTORIA → Hotel Elch Boutique → Karl August - a Neighborhood Hotel |
+| 2026-09-27 | Duck.ai | nein | Hotel Elch Boutique → Scandic Nürnberg Central → Leonardo Royal Hotel Nürnberg |
 | 2026-09-27 | Perplexity | ja | Hotel VICTORIA Nürnberg → Hotel Drei Raben → Hotel Elch Boutique |
 
-- 2 Belege von 7 geplanten Tagen: In 2 von 2 Antworten wird Ihr Haus genannt.
-- Für **Duck.ai** gibt es keinen Rohbeleg (bewusst offen: der anonyme Chat hatte keinen Verlaufslink und ist nach dem Schließen nicht abrufbar; vorhanden ist nur die Zusammenfassung im Pilotbericht); der Lauf ist damit nicht neu prüfbar.
+- 3 Belege von 7 geplanten Tagen: In 2 von 3 Antworten wird Ihr Haus genannt.
 
 ## Was noch fehlt
 
@@ -24,6 +24,7 @@
 - Pro Tag und System ein Lauf: erst mehrere Tage erlauben eine Aussage darüber, ob eine Nennung stabil bleibt. Ein einzelner Tag belegt das nicht.
 - `2026-09-27-chatgpt-run1.md`: Antwort-URL fehlt (der Lauf ist nicht per Link nachprüfbar).
 - `2026-09-27-chatgpt-run1.md`: Anonymität fehlt (der Lauf lief in einer bestehenden angemeldeten Sitzung).
+- `2026-09-27-duck-ai-run1.md`: Antwort-URL fehlt (der Lauf ist nicht per Link nachprüfbar).
 - `2026-09-27-perplexity-run1.md`: Modelllabel fehlt (das Produkt zeigte kein Modelllabel an).
 
 ## Was diese Messung nicht ist

@@ -29,6 +29,12 @@ const chatgpt = parseEvidenceRecord(
   "2026-09-27-chatgpt-run1.md",
   read(`${EVIDENCE_GLOB_DIR}/2026-09-27-chatgpt-run1.md`),
 );
+const duckai = parseEvidenceRecord(
+  "2026-09-27-duck-ai-run1.md",
+  read(`${EVIDENCE_GLOB_DIR}/2026-09-27-duck-ai-run1.md`),
+);
+/** Every record on disk; the coverage expectation is written against the real set. */
+const allRecords = [perplexity, chatgpt, duckai];
 
 describe("protocol status views", () => {
   it("reads the recorded metadata out of the raw evidence files", () => {
@@ -114,57 +120,66 @@ describe("protocol status views", () => {
     expect(complete).toContain("Alle 1 geplanten Tage sind abgedeckt.");
   });
 
-  it("leaves no planned system uncovered without a recorded reason", () => {
-    const records = [perplexity, chatgpt];
-    // Duck.ai has no record, so this only passes because a reasoned waiver covers it.
-    expect(unwaivedCoverageGaps(records)).toEqual([]);
-    expect(staleSystemWaivers(records)).toEqual([]);
+  it("leaves every planned system covered by a record", () => {
+    // All three systems now carry raw evidence, so no waiver is needed any more.
+    expect(allRecords.map((record) => record.system).sort()).toEqual([
+      "ChatGPT",
+      "Duck.ai",
+      "Perplexity",
+    ]);
+    expect(unwaivedCoverageGaps(allRecords)).toEqual([]);
+    expect(COVERAGE_WAIVERS).toEqual([]);
 
-    const coverage = buildCoverageMarkdown(records, { seriesDays: 7 });
-    expect(coverage).toContain("**Duck.ai:** kein Rohbeleg vorhanden — bewusst offen:");
-    expect(coverage).toContain("ohne Rohbeleg eingeplant und begründet");
+    const coverage = buildCoverageMarkdown(allRecords, { seriesDays: 7 });
+    expect(coverage).toContain("**Duck.ai:** 1 Beleg an 1 Tag");
     expect(coverage).not.toContain("Offene Lücken ohne Begründung");
+    expect(coverage).not.toContain("bewusst offen:");
   });
 
   it("fails on a planned system that is neither measured nor waived", () => {
-    const records = [perplexity, chatgpt];
+    // The real records all exist, so this works on a subset where one is still missing.
+    const withoutDuckAi = [perplexity, chatgpt];
+
     // A newly planned system is a hard gap until it has a record or a reasoned waiver.
     expect(
-      unwaivedCoverageGaps(records, { systems: [...PROTOCOL_SYSTEMS, "Copilot"] }),
+      unwaivedCoverageGaps(withoutDuckAi, {
+        systems: [...PROTOCOL_SYSTEMS, "Copilot"],
+        waivers: [{ system: "Duck.ai", reason: "Chat ohne addressierbaren Verlaufslink" }],
+      }),
     ).toEqual(["Copilot"]);
 
     // A waiver without a reason does not count as one.
     expect(
-      unwaivedCoverageGaps(records, {
+      unwaivedCoverageGaps(withoutDuckAi, {
         systems: ["Duck.ai"],
         waivers: [{ system: "Duck.ai", reason: "   " }],
       }),
     ).toEqual(["Duck.ai"]);
     expect(
-      unwaivedCoverageGaps(records, {
+      unwaivedCoverageGaps(withoutDuckAi, {
         systems: ["Duck.ai"],
         waivers: [{ system: "Duck.ai", reason: "Chat ohne Verlaufslink" }],
       }),
     ).toEqual([]);
 
     // A waiver must not outlive the gap it covered.
-    expect(staleSystemWaivers(records, [{ system: "Perplexity", reason: "x" }])).toEqual([
+    expect(staleSystemWaivers(withoutDuckAi, [{ system: "Perplexity", reason: "x" }])).toEqual([
       "Perplexity",
     ]);
   });
 
-  it("keeps the shipped waivers meaningful", () => {
-    expect(COVERAGE_WAIVERS.length).toBeGreaterThan(0);
+  it("keeps any shipped waiver meaningful and current", () => {
+    // Waivers are the exception; an empty list means every planned system is covered.
     for (const waiver of COVERAGE_WAIVERS) {
       expect(PROTOCOL_SYSTEMS as readonly string[]).toContain(waiver.system);
       expect(waiver.reason.trim().length).toBeGreaterThan(20);
     }
+    expect(staleSystemWaivers(allRecords)).toEqual([]);
   });
 
   it("pins the generated views to the committed files", () => {
-    const records = [perplexity, chatgpt];
-    expect(buildCoverageMarkdown(records, { seriesDays: 7 })).toBe(read(COVERAGE_PATH));
-    expect(buildComparisonMarkdown(records)).toBe(read(COMPARISON_PATH));
-    expect(buildMeasurementPlanMarkdown(records, { seriesDays: 7 })).toBe(read(PLAN_PATH));
+    expect(buildCoverageMarkdown(allRecords, { seriesDays: 7 })).toBe(read(COVERAGE_PATH));
+    expect(buildComparisonMarkdown(allRecords)).toBe(read(COMPARISON_PATH));
+    expect(buildMeasurementPlanMarkdown(allRecords, { seriesDays: 7 })).toBe(read(PLAN_PATH));
   });
 });

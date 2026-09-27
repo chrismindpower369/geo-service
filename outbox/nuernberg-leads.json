@@ -87,6 +87,6 @@
     ],
     "probeAuditReport": "reports/hotel-victoria.md",
     "status": "reviewed",
-    "auditScope": "Official public website pages reviewed on 2026-09-27; three documented prompt runs (Perplexity, Duck.ai, ChatGPT) recorded as snapshots with raw evidence files; no measurement series; the ChatGPT run came from a signed-in temporary chat and is flagged as not anonymous."
+    "auditScope": "Official public website pages reviewed on 2026-09-27; four documented prompt runs across three systems (Perplexity, Duck.ai twice, ChatGPT), each with a raw evidence file; no measurement series; the ChatGPT run came from a signed-in temporary chat and is flagged as not anonymous."
   }
 ]
