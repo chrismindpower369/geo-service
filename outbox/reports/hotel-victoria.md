@@ -6,7 +6,7 @@
 
 Das Hotel veröffentlicht bereits Schema.org-**Microdata** mit `Hotel`, `PostalAddress`, `telephone`, `priceRange` und `AggregateRating`. Im tatsächlich gerenderten HTML der Startseite wurde kein `application/ld+json`-Script gefunden. Im vorhandenen Hotel-Microdata fehlten dort `amenityFeature` und `makesOffer`; Zimmerkategorien, Ausstattung, Tagungsangebote und Preise stehen hingegen auf eigenen öffentlichen Seiten. Der belegte technische Hebel ist deshalb eine zusätzliche, mit diesen Seiten konsistente JSON-LD-Repräsentation — **nicht** das pauschale Fehlen jeglicher strukturierter Daten.
 
-Am 27.09.2026 wurden erstmals zwei dokumentierte Testläufe mit dem neutralen Prüfprompt aus dem Review-Brief erhoben (Abschnitt 2): Perplexity nannte das Hotel an erster Stelle von drei Empfehlungen und zitierte dessen eigene Homepage als erste Quelle; Duck.ai (angezeigtes Modell „GPT-5.6 Luna“) erwähnte es unter den drei Empfehlungen nicht. ChatGPT war ohne Anmeldung nicht prüfbar. Das ist eine Momentaufnahme aus einem Tag, keine Messreihe; die Behauptung im Review-Brief, das Hotel werde „regelmäßig“ unter den Top-Empfehlungen genannt, bleibt dadurch **nicht verifiziert**.
+Am 27.09.2026 wurden drei dokumentierte Testläufe mit dem neutralen Prüfprompt aus dem Review-Brief erhoben (Abschnitt 2): Perplexity und ChatGPT nannten das Hotel jeweils an erster Stelle von drei Empfehlungen; Perplexity zitierte dabei dessen eigene Homepage als erste Quelle, ChatGPT stützte den Eintrag auf den Chip „Tourismus Nürnberg“. Duck.ai (angezeigtes Modell „GPT-5.6 Luna“) erwähnte es unter den drei Empfehlungen nicht. Das Bild ist zwischen den Systemen widersprüchlich. Alle drei Läufe sind Momentaufnahmen eines Tages, keine Messreihe; die Behauptung im Review-Brief, das Hotel werde „regelmäßig“ unter den Top-Empfehlungen genannt, bleibt dadurch **nicht verifiziert**.
 
 ## 1. Unternehmens- und Standortdaten
 
@@ -19,12 +19,12 @@ Die offizielle Ankunftsseite verortet das Hotel am Eingang zur Altstadt, gegenü
 ## 2. Direkte Nennung und Zitation durch KI-Systeme
 
 - **Prüfprompt (identisch in beiden Läufen, ohne Nennung des Hauses):** „Empfiehl mir 3 charmante Tagungshotels / Boutique-Hotels direkt in der Nürnberger Altstadt/Hauptbahnhof.“
-- **Protokoll:** je Lauf ein frischer, anonymer Chat im standardmäßigen deutschen Browserprofil; Datum **2026-09-27** (Europe/Berlin); keine Nachfragen, kein Kontext aus Vorfragen.
-- **Ergebnis über zwei Systeme: nicht konsistent.** Perplexity nannte Hotel VICTORIA als **erste von drei Empfehlungen** und zitierte die offizielle Homepage als erste Quelle; Duck.ai nannte es **nicht** unter den drei Empfehlungen.
+- **Protokoll:** je Lauf ein frischer Chat im standardmäßigen deutschen Browserprofil; Datum **2026-09-27**; keine Nachfragen, kein Kontext aus Vorfragen. Durchläufe 1 und 2 liefen anonym, Durchlauf 3 dagegen in einer bestehenden angemeldeten Sitzung als temporärer Chat — der Unterschied ist unten je Lauf vermerkt.
+- **Ergebnis über drei Systeme: nicht konsistent.** Perplexity und ChatGPT nannten Hotel VICTORIA jeweils als **erste von drei Empfehlungen**; Duck.ai nannte es **nicht** unter den drei Empfehlungen.
 
 ### Durchlauf 1 — Perplexity (Website-Antwort mit Quellenverzeichnis)
 
-- **Zeit/Produkt:** 20:49 laut Antwortseite (Europe/Berlin); Modelllabel im Antwortkopf nicht angezeigt; Antwort-URL: https://www.perplexity.ai/search/f8a8111c-7651-463f-afda-76ececaeb5cc
+- **Zeit/Produkt:** 20:49 laut Antwortseite (Europe/Berlin); Modelllabel im Antwortkopf nicht angezeigt; anonym; Antwort-URL: https://www.perplexity.ai/search/f8a8111c-7651-463f-afda-76ececaeb5cc
 - **Ergebnis:** Tabelle mit drei Empfehlungen — 1. **Hotel Victoria Nürnberg** („Direkt am Tor zur Altstadt, wenige Schritte vom Hauptbahnhof“; „Besonders charmantes Boutique-Hotel in einem denkmalgeschützten Gebäude von 1896; 65 individuell gestaltete Zimmer und passende Räume für kleinere Tagungen. Das Hotel bezeichnet sich selbst ausdrücklich als Tagungshotel.“), 2. Hotel Drei Raben, 3. Hotel Elch Boutique. In der Einordnung: „Für eine echte Tagung mit professionellem Rahmen: Hotel Victoria.“ Für mehr als etwa 20–30 Personen nannte die Antwort zusätzlich Scandic Nürnberg Central und Le Méridien Grand Hotel Nürnberg.
 - **Zitat-URLs (Auswahl aus „25 Quellen“, das Hotel betreffend):** https://www.hotelvictoria.de/ (erste Quelle) · https://tourismus.nuernberg.de/themen/tagung-kongress/tagungshotels/ · https://www.scandichotels.com/de/tagungen-events/nuernberg
 - **Sachliche Prüfung:** Lage- und Zimmerangaben stimmen mit den offiziellen Seiten überein (65 Zimmer, Gebäude von 1896, Altstadtlage am Hauptbahnhof); im Befundtext ist kein Widerspruch erkennbar.
@@ -36,17 +36,27 @@ Die offizielle Ankunftsseite verortet das Hotel am Eingang zur Altstadt, gegenü
 - **Ergebnis:** drei nummerierte Empfehlungen — 1. Hotel Elch Boutique (Quelle „nuernberg.de“), 2. Leonardo Royal Hotel Nürnberg („tagungshotels.com“), 3. Scandic Nürnberg Central („scandichotels.com“); das Kurzfazit empfiehlt je nach Anlass genau diese drei. **Hotel VICTORIA wird nicht genannt**, auch nicht im Fazit.
 - **Zitat-URLs der Antwort:** https://tourismus.nuernberg.de/themen/tagung-kongress/tagungshotels/ · https://www.tagungshotels.com/index.php?hotel=1580&seite=hotel&sprache=de · https://www.scandichotels.com/de/tagungen-events/nuernberg; außerdem auf der Antwortseite verlinkt u. a. https://www.tagungshotel.net/de/tagungshotel/nuernberg und https://www.art-business-hotel.com/hauptbahnhof-nuernberg/
 
+### Durchlauf 3 — ChatGPT (angemeldete Sitzung, temporärer Chat)
+
+- **Zeit/Produkt:** 2026-09-27, 21:28 lokale Rechnerzeit; Standardprofil mit angemeldetem Konto (also **nicht anonym**), temporärer Chat ohne Verlauf; angezeigtes Modelllabel „ChatGPT“ (Menüeintrag „ChatGPT – Ideal für alltägliche Aufgaben“), keine Versionsnummer sichtbar; keine addressierbare Antwort-URL.
+- **Ergebnis:** Überschrift „Meine 3 Empfehlungen“ mit **1. Hotel VICTORIA** („Königstraße 80, 90402 Nürnberg, Deutschland“; „Inhabergeführtes 4★-Hotel mit viel Persönlichkeit – ideal für Geschäftsreisende. Wintergarten, stilvolle Lobby und nur 2 Gehminuten vom Hauptbahnhof entfernt.“), 2. Hotel Elch Boutique, 3. Karl August - a Neighborhood Hotel. Ein vorgeschaltetes Karten-/Listenmodul nannte dieselben drei Häuser, dort mit Preisen in US-Dollar.
+- **Zitat-Chips:** „Tourismus Nürnberg“ am Eintrag Hotel VICTORIA und am Eintrag Hotel Elch Boutique, „Booking“ am Eintrag Karl August, zusätzlich „Tourismus Nürnberg +1“ am Preisniveau. Die Chips sind Schaltflächen; ihre Ziel-URLs waren im DOM nicht auslesbar.
+- **Sachliche Prüfung:** Die Adressangabe entspricht der offiziellen Kontaktseite. Die gezeigte Bewertung (4,7 aus 1.330 Rezensionen) stammt aus dem Modul und wurde nicht gegen eine Quelle geprüft.
+- **Rohbeleg:** vollständiger Antworttext, Chip-Beschriftungen und Einordnung des Seitengerüsts: `outbox/evidence/2026-09-27-chatgpt-run1.md`
+
 ### Grenzen dieses Befunds
 
-- Zwei Läufe an einem Tag, wenige Minuten auseinander, je ein Produkt: Das belegt **keine zeitliche Stabilität** und keine „regelmäßige“ Nennung; eine Messreihe (wiederholte Läufe je System und Prompt mit Protokoll) fehlt weiterhin.
+- Drei Läufe an einem Tag, kurz nacheinander, je ein Produkt: Das belegt **keine zeitliche Stabilität** und keine „regelmäßige“ Nennung; eine Messreihe (wiederholte Läufe je System und Prompt mit Protokoll) fehlt weiterhin.
 - Die Auswahlkriterien der Systeme sind nicht einsehbar; Perplexity zeigte zusätzlich ein Karten-/Places-Modul mit zehn Hotels, die Empfehlung selbst war eine Top-3-Tabelle.
 - Durchlauf 2 ist nicht mehr im Original abrufbar: der anonyme Duck.ai-Chat hatte keinen Verlaufslink und ist nach dem Schließen nicht wieder aufrufbar. Belegt sind dort die wörtlich zitierten Passagen und die vollständigen Quellen-URLs, nicht der komplette Antworttext. Durchlauf 1 ist dagegen über die Antwort-URL und den Rohbeleg vollständig nachprüfbar.
-- ChatGPT wurde **nicht geprüft**: chatgpt.com verlangt im geteilten Browser eine Anmeldung; es wurde kein Login durchgeführt und keine Antwort unterstellt.
+- Durchläufe 2 und 3 haben keine addressierbare Antwort-URL; sie sind nur über den gespeicherten Rohbeleg nachprüfbar, nicht erneut im Original.
+- Durchlauf 3 lief **nicht anonym**, sondern in einer angemeldeten Sitzung (temporärer Chat) und ist daher nicht mit den beiden anonymen Läufen gleichzusetzen. Eine anonyme ChatGPT-Prüfung war nicht möglich, weil chatgpt.com eine Anmeldung verlangt.
+- Die in Durchlauf 3 gezeigten Preise stehen in US-Dollar, obwohl die Antwort deutsch ist; Preisangaben aus KI-Modulen sind nicht als Hotelpreise gesichert.
 - Die Nennung bei Perplexity stützt sich u. a. auf die eigene Website des Hotels („bezeichnet sich selbst ausdrücklich als Tagungshotel“) — das stützt den technischen Hebel aus Abschnitt 4 (vollständige, strukturierte Angebotsdaten), ist aber kein Wirkungsnachweis des JSON-LD-Vorschlags.
 
 ### Mitbewerber (nicht Teil dieses Piloten)
 
-Eine systematische Mitbewerberrecherche war nicht Teil dieses Piloten. Die Häuser, die die beiden Testläufe zusätzlich nannten — Hotel Drei Raben, Hotel Elch Boutique, Leonardo Royal Hotel Nürnberg, Scandic Nürnberg Central und Le Méridien Grand Hotel Nürnberg — stammen aus zwei Antworten und sind keine geprüften Mitbewerberaussagen.
+Eine systematische Mitbewerberrecherche war nicht Teil dieses Piloten. Die Häuser, die die drei Testläufe zusätzlich nannten — Hotel Drei Raben, Hotel Elch Boutique, Karl August - a Neighborhood Hotel, Leonardo Royal Hotel Nürnberg, Scandic Nürnberg Central und Le Méridien Grand Hotel Nürnberg — stammen aus drei Antworten und sind keine geprüften Mitbewerberaussagen.
 
 ## 3. Technische Bestandsaufnahme
 
@@ -178,12 +188,13 @@ Der folgende selbstständige Block ist syntaktisch gültiges JSON-LD und verwend
 
 1. Das Hotel prüft und genehmigt die offiziellen Kontakt-, Lage-, Zimmer- und Angebotsinformationen für eine strukturierte Darstellung.
 2. Ein Webverantwortlicher kann den JSON-LD-Entwurf nach Bestätigung der veränderlichen Preis-/Parkangaben zusätzlich zum vorhandenen Markup im `<head>` der passenden Seite einbauen und anschließend per Syntax-/Schema-Test validieren.
-3. Die beiden dokumentierten Testläufe sind eine Momentaufnahme. Für belastbare Aussagen sollte dasselbe Protokoll (Datum, System/Modell, Region, Prompt, vollständige Antwort, Zitat-URLs) über mehrere Tage und Systeme wiederholt werden; „regelmäßige“ Nennungen bleiben ohne solche Messreihe unbelegt.
+3. Die drei dokumentierten Testläufe sind eine Momentaufnahme. Für belastbare Aussagen sollte dasselbe Protokoll (Datum, System/Modell, Region, Prompt, vollständige Antwort, Zitat-URLs) über mehrere Tage und Systeme wiederholt werden; „regelmäßige“ Nennungen bleiben ohne solche Messreihe unbelegt.
 
 ## Quellen (offizielle Website und Schema.org)
 
 - Perplexity-Antwort (Durchlauf 1, 20:49): https://www.perplexity.ai/search/f8a8111c-7651-463f-afda-76ececaeb5cc — vollständiger Antworttext und Quellenangaben im Rohbeleg `outbox/evidence/2026-09-27-perplexity-run1.md`
 - Duck.ai-Antwort (Durchlauf 2): anonymer Chat ohne addressierbaren Verlaufslink; im Bericht stehen Prompt, wörtliche Zitate und die Quellen-URLs, der vollständige Antworttext liegt nicht vor
+- ChatGPT-Antwort (Durchlauf 3): temporärer Chat ohne addressierbare URL; vollständiger Antworttext, Chip-Beschriftungen und Einordnung des Seitengerüsts im Rohbeleg `outbox/evidence/2026-09-27-chatgpt-run1.md`
 - Hotel-Startseite / vorhandenes Microdata und sichtbare Beschreibung: https://www.hotelvictoria.de/ (Browser-DOM am 27.09.2026; `Hotel`-Microdata vorhanden, kein JSON-LD-Script in der beobachteten Startseitenansicht; in Durchlauf 1 des KI-Tests als erste Quelle zitiert)
 - Impressum / Firmenname, Anschrift und `book@hotelvictoria.de`: https://www.hotelvictoria.de/kontakt/impressum
 - Lage / Handwerkerhof, Hauptbahnhof und Altstadteingang: https://www.hotelvictoria.de/en/contact/arrival-here
