@@ -39,6 +39,7 @@ describe("citation run evidence records", () => {
       url: "https://chatgpt.com/c/abc",
       sourcePanel: "3 Quellen",
       sources: ["https://www.hotelvictoria.de/"],
+      ranking: ["Hotel VICTORIA", "Hotel Elch Boutique", "Karl August"],
       notes: ["Kopfzeile und Folgefragen sind Seitengerüst."],
     });
 
@@ -48,6 +49,9 @@ describe("citation run evidence records", () => {
     expect(markdown).toContain("```text");
     expect(markdown).toContain("1. Hotel VICTORIA");
     expect(markdown).toContain("https://www.hotelvictoria.de/");
+    expect(markdown).toContain(
+      "**Reihenfolge der genannten Häuser:** Hotel VICTORIA → Hotel Elch Boutique → Karl August",
+    );
     expect(markdown).toContain("Kopfzeile und Folgefragen sind Seitengerüst.");
     expect(markdown).toContain("einzelner Lauf an einem Tag");
     expect(markdown.endsWith("\n")).toBe(true);
@@ -64,6 +68,8 @@ describe("citation run evidence records", () => {
     expect(markdown).toContain("nicht angezeigt");
     expect(markdown).toContain("nicht wieder aufrufbar");
     expect(markdown).toContain("keine auslesbaren Quellenangaben");
+    // No ranking recorded means no ranking line — it is never guessed.
+    expect(markdown).not.toContain("Reihenfolge der genannten Häuser");
   });
 
   it("refuses a record without an answer or without a prompt", () => {

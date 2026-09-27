@@ -5,10 +5,12 @@ import { describe, expect, it } from "vitest";
 import {
   buildComparisonMarkdown,
   buildCoverageMarkdown,
+  buildMeasurementPlanMarkdown,
   COMPARISON_PATH,
   COVERAGE_PATH,
   EVIDENCE_GLOB_DIR,
   parseEvidenceRecord,
+  PLAN_PATH,
 } from "../src/protocolStatus.js";
 
 const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -39,6 +41,27 @@ describe("protocol status views", () => {
     expect(chatgpt.anonymous).toBe(false);
     expect(chatgpt.mentionsHotelVictoria).toBe(true);
     expect(chatgpt.model).toContain("ChatGPT");
+
+    // The protocol only means something if every record answers the same question.
+    expect(perplexity.prompt).toContain("Empfiehl mir 3 charmante Tagungshotels");
+    expect(chatgpt.prompt).toBe(perplexity.prompt);
+  });
+
+  it("reads the recorded order of houses without guessing one", () => {
+    expect(perplexity.ranking).toHaveLength(3);
+    expect(perplexity.ranking[0]).toMatch(/victoria/i);
+    expect(chatgpt.ranking).toHaveLength(3);
+    expect(chatgpt.ranking[0]).toMatch(/victoria/i);
+
+    const comparison = buildComparisonMarkdown([perplexity, chatgpt]);
+    expect(comparison).toContain("Hotel VICTORIA → Hotel Elch Boutique");
+    expect(comparison).toContain("In 2 von 2 Belegen mit protokollierter Reihenfolge");
+
+    // Without a recorded order the column stays empty and the summary says so.
+    const withoutOrder = { ...chatgpt, ranking: [] };
+    const plain = buildComparisonMarkdown([withoutOrder]);
+    expect(plain).toContain("nicht protokolliert");
+    expect(plain).toContain("In keinem Beleg ist die Reihenfolge festgehalten");
   });
 
   it("refuses a record without metadata or without the verbatim answer", () => {
@@ -73,9 +96,24 @@ describe("protocol status views", () => {
     );
   });
 
+  it("keeps the measurement plan inside what the records support", () => {
+    const plan = buildMeasurementPlanMarkdown([perplexity, chatgpt], { seriesDays: 7 });
+    expect(plan).toContain("Empfiehl mir 3 charmante Tagungshotels");
+    expect(plan).toContain("6 von 7 Tagen sind noch nicht gemessen");
+    expect(plan).toContain("Duck.ai");
+    expect(plan).toContain("Was diese Messung nicht ist");
+    expect(plan).toContain("keine Erfolgszusage");
+
+    // The plan may not claim more coverage than the records hold.
+    const complete = buildMeasurementPlanMarkdown([perplexity, chatgpt], { seriesDays: 1 });
+    expect(complete).not.toContain("sind noch nicht gemessen");
+    expect(complete).toContain("Alle 1 geplanten Tage sind abgedeckt.");
+  });
+
   it("pins the generated views to the committed files", () => {
     const records = [perplexity, chatgpt];
     expect(buildCoverageMarkdown(records, { seriesDays: 7 })).toBe(read(COVERAGE_PATH));
     expect(buildComparisonMarkdown(records)).toBe(read(COMPARISON_PATH));
+    expect(buildMeasurementPlanMarkdown(records, { seriesDays: 7 })).toBe(read(PLAN_PATH));
   });
 });

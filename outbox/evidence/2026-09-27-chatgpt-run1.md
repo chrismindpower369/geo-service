@@ -8,7 +8,8 @@
 - **Sitzungsart:** angemeldete Sitzung im Standardprofil (Konto „Freebuff“), temporärer Chat ohne Verlauf
 - **Prompt (ohne Nennung des Hauses):** „Empfiehl mir 3 charmante Tagungshotels / Boutique-Hotels direkt in der Nürnberger Altstadt/Hauptbahnhof.“
 - **Antwort-URL:** keine adressierbare URL; der Lauf ist nicht wieder aufrufbar
-- **Erfassungsmethode:** Auslesen des gerenderten Seitentexts (innerText des Hauptbereichs) während des Durchlaufs
+- **Erfassungsmethode:** Auslesen des gerenderten Seitentexts (innerText des Hauptbereichs) während des Durchlaufs. Die Reihenfolge unten wurde aus dem Abschnitt „Meine 3 Empfehlungen“ abgelesen.
+- **Reihenfolge der genannten Häuser:** Hotel VICTORIA → Hotel Elch Boutique → Karl August - a Neighborhood Hotel
 
 ## Vollständiger Antworttext (wörtlich)
 
