@@ -13,21 +13,21 @@ const PILOT_LEAD_ID = "hotel-victoria-nuernberg";
 const PILOT_REPORT_PATH = "../outbox/reports/hotel-victoria.md";
 
 const PILOT_MARKERS = [
-  "nicht verifiziert", // AI citation claims stay unverified; no runs are asserted
+  "nicht verifiziert", // no claim of “regular” citations is asserted
   "27.09.2026", // review date of the official pages
-  "keine KI-Zitations- oder Rankingmessung",
+  "keine Messreihe", // two documented runs are a snapshot, not a measurement series
+  "Zitat-URLs",
+  "perplexity.ai/search/f8a8111c", // documented run 1 answer URL
+  "GPT-5.6 Luna", // documented run 2 model label as displayed
   "Empfehlungen",
   "Quellen",
 ];
 const FORBIDDEN_PILOT_MARKERS = [
   "Simulation only", // the pilot is a reviewed report, not a simulation placeholder
   "Platzhalter",
-  // No unverified AI-run evidence may be presented as a finding:
-  "Duck.ai",
-  "arena.ai",
-  "GPT-5.6",
+  // Legacy of the unverified era that must never return as a finding:
   "401 Unauthorized",
-  "Durchlauf A",
+  "wird daher nicht als gemessener Befund übernommen",
 ];
 const SIMULATION_MARKERS = ["simulated", "kein sichtbarkeits-audit"];
 
@@ -119,10 +119,14 @@ describe("prepared Nürnberg outbox", () => {
     expect(drafts).toContain("# E-Mail-Entwürfe – nicht versenden");
     expect(drafts.match(/^## [1-5]\./gm)).toHaveLength(5);
     expect(drafts).toContain("Es wurde keine E-Mail versendet");
-    // The pilot draft references the real report and marks AI citations unverified.
+    // The pilot draft references the real report, the two documented snapshot runs and
+    // still marks the “regular top mentions” claim as unverified.
     expect(drafts).toContain("book@hotelvictoria.de");
     expect(drafts).toContain("nicht verifiziert");
-    expect(drafts).not.toContain("Duck.ai");
+    expect(drafts).toContain("keine Messreihe");
+    expect(drafts).toContain("GPT-5.6 Luna"); // documented run 2 label as displayed
+    // Legacy of the unverified era that must never return as a finding:
     expect(drafts).not.toContain("arena.ai");
+    expect(drafts).not.toContain("401 Unauthorized");
   });
 });
