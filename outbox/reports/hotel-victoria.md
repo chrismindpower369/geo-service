@@ -10,38 +10,18 @@ Für ChatGPT und Perplexity liegen in den verfügbaren Prüfunterlagen keine ver
 
 ## 1. Unternehmens- und Standortdaten
 
-Im Kurzbefund heißt es `@type: Hotel`; für den konkreten Datenblock gilt der folgende Vorschlag.
+Alle nachfolgenden Fakten stammen aus offiziellen Seiten des Hotels; jede Angabe nennt ihre Quelle (Abschnitt „Quellen“).
 
 Die offizielle Kontaktseite nennt **Hotel VICTORIA Theodor Schuler GmbH & Co. KG**, Königstraße 80, 90402 Nürnberg, Telefon **+49 (0) 911 2405-0** und `book@hotelvictoria.de`. Die Hotelwebsite stellt das Haus als privat geführt dar. Ihre Geschichtsseite nennt den Bau im Jahr 1896 und die heutige Führung durch die Urenkelin des Käufers Joseph Schuler, Sabine Powels.
 
 Die offizielle Ankunftsseite verortet das Hotel am Eingang zur Altstadt, gegenüber dem Hauptbahnhof und zwischen Handwerkerhof und Neuem Museum. Sie nennt etwa 100 m Fußweg zum Hauptbahnhof und 1 km bis zur Altstadtmitte. „Direkt am Handwerkerhof“ wäre zu stark: Belegt ist „zwischen Handwerkerhof und Neuem Museum“ beziehungsweise „gegenüber dem Hauptbahnhof“.
 
-## 2. Direkte Nennung in KI-Antworten
+## 2. Direkte Nennung und Zitation durch KI-Systeme
 
-- **Prüfszenario aus dem Brief:** „Empfiehl mir 3 charmante Tagungshotels / Boutique-Hotels direkt in der Nürnberger Altstadt/Hauptbahnhof.“
-- **Status dieses Audits:** `nicht verifiziert` für ChatGPT und Perplexity – für diese beiden Systeme liegt kein Antwortmitschnitt vor. Zwei andere Systeme wurden am 27.09.2026 dagegen einzeln dokumentiert (unten), ausdrücklich als Momentaufnahme.
-
-### Dokumentierte Einzelruns am 27.09.2026 (zwei Systeme, keine Messreihe)
-
-Vier neutrale Fragen, ohne Nennung des Hauses; Datum der Läufe: **2026-09-27** (Europe/Berlin).
-
-1. „Welche Hotels in der Nürnberger Altstadt sind für Tagungen und Seminare zu empfehlen?“
-2. „Welche Hotels in Nürnberg eignen sich für Firmenveranstaltungen oder Weihnachtsfeiern in der Altstadt mit rund 100 Gästen?“
-3. „Welche Hotels in Nürnberg bieten Tagungsräume für bis zu 120 Personen?“
-4. „Which hotels in Nuremberg's old town are recommended for conferences and business meetings?“
-
-| Durchlauf | System (wie angezeigt) | Zeit | Chatführung | Haus in den Fragen 1–4 genannt? |
-| --- | --- | --- | --- | --- |
-| A | Duck.ai, Modell „GPT-5.6 Luna“ | 18:19–18:22 | ein fortlaufender Chat | ja / ja / ja / ja |
-| B | arena.ai „Direct“, Label „Max“, Anbieter laut Seite Google (1, 4) bzw. Meta (3) | 18:24–18:29 | je Frage ein frischer Chat; **keine Zitat-URLs** | ja, aber mit falschen Angaben / nein / nein / ja, aber mit falschen Angaben |
-| A′ | Duck.ai, Modell „GPT-5.6 Luna“ | 18:29–18:30 | frischer Chat, nur Frage 1 | ja (an erster Stelle) |
-
-- **Wörtliche Auszüge:** A/1 „Am besten für eine hochwertige, zentral gelegene Tagung: Hotel VICTORIA“ · A/2 „Für eine reine Weihnachtsfeier mit 100 Sitzplätzen sollte die konkrete Raumkapazität allerdings direkt angefragt werden.“ · A/4 „For a smaller, more personal meeting in the Old Town area: Hotel VICTORIA“ · A′ „Sechs Tagungsräume, moderne Technik und Tagungspauschalen […] ab etwa 200–390 € pro Tag“.
-- **Zitat-URLs:** Nur Durchlauf A nannte Quellen; für das Haus https://www.hotelvictoria.de/tagungshotel-nuernberg/unser-tagungshotel (Frage 1) und https://www.hotelvictoria.de/en/meeting/our-meeting-rooms (Fragen 3 und 4), daneben u. a. https://www.kongress.de/tagungshotels-nuernberg, https://www.eventinc.de/tagungshotel/nuernberg, https://arvena.de/arvena-park/tagung/, https://www.marriott.com/en-us/hotels/nuemd-le-meridien-grand-hotel-nuremberg/events/ und https://www.cvent.com/venues/results/Nuremberg--Germany.
-- **Belegte Fehlerquellen:** A hinterlegte in Frage 2 neben dem Hotel-Eintrag die fachfremde Quelle `hotel-riesengebirge.de/feiern/firmenfeiern` und vermischte in Frage 3 „Kapazität“ mit einer Raumgröße („bis 120 m²“). B verortete das Haus „am Handwerkerhof, unmittelbar innerhalb der Stadtmauer“ und nannte „bis zu ca. 30 Personen“ bzw. „up to 50 people“; in Frage 3 erschien es nur in der mitangezeigten Gedankenkette (dort mit der falschen Adresse „Königstorgraben 3“) und fehlte im Ergebnis. Nach der offiziellen Seite liegt das Haus in der Königstraße 80 gegenüber dem Hauptbahnhof und bietet sechs Räume bis 120 m².
-- **Befund zur Stabilität:** über Systeme **nicht stabil** (A 4/4 gegenüber B 2/4, dort mit Faktenfehlern). Innerhalb von A hielt die Nennung im frischen Chat an, sie ist dort also nicht Folge des Gesprächskontexts. **Zeitliche** Stabilität ist **nicht** geprüft, alle Läufe liegen am selben Tag Minuten auseinander; „regelmäßige“ Nennung ist damit weiterhin **keine Messung** und nicht belegt.
-- Die offizielle Hotelwebsite belegt relevante, zitierfähige Fakten (historische Altstadtlage, Hauptbahnhofnähe, Hotelgeschichte seit 1896 und Tagungsangebot). Das ist Kontext für eine mögliche Empfehlung, aber **kein Beleg**, dass ein KI-System das Hotel tatsächlich nennt oder es „regelmäßig“ unter die Top 3 setzt.
-- Eine belastbare Sichtbarkeitsmessung würde mehrere dokumentierte Läufe mit Datum, Produkt/Modell, Region, identischem Prompt, vollständiger Antwort und sichtbaren Quellenzitaten benötigen. Dieser Bericht behauptet eine solche Messung nicht.
+- **Prüfszenario aus dem Review-Brief:** „Empfiehl mir 3 charmante Tagungshotels / Boutique-Hotels direkt in der Nürnberger Altstadt/Hauptbahnhof.“
+- **Befund:** `nicht verifiziert`. In den verfügbaren Prüfunterlagen liegt für ChatGPT, Perplexity oder ein anderes KI-System kein nachvollziehbarer Antwortmitschnitt mit Produkt-/Modellangabe, Datum, vollständigem Prompt und sichtbaren Zitat-URLs vor.
+- Die im Review-Brief enthaltene Aussage, das Hotel werde bei ChatGPT und Perplexity regelmäßig unter den Top-Empfehlungen genannt, wird deshalb **nicht als Tatsache wiederholt**. Dieser Bericht behauptet weder eine Nennung noch eine Nichtnennung, ein Ranking oder konkrete KI-Zitate.
+- Für eine spätere Prüfung sollte derselbe neutrale Prompt je System in frischen Chats mehrfach verwendet und pro Lauf mit Datum, Region/Sprache, Produkt- und Modelllabel, vollständiger Antwort sowie sichtbaren Quellenlinks protokolliert werden. Eine einzelne Antwort wäre nur eine Momentaufnahme, keine Aussage über regelmäßige Sichtbarkeit.
 
 ## 3. Technische Bestandsaufnahme
 
