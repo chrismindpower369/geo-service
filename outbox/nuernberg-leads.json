@@ -87,6 +87,6 @@
     ],
     "probeAuditReport": "reports/hotel-victoria.md",
     "status": "reviewed",
-    "auditScope": "Official public website pages reviewed on 2026-09-27; AI citation claims remain unverified."
+    "auditScope": "Official public website pages reviewed on 2026-09-27; two documented prompt runs (Perplexity, Duck.ai) recorded as snapshots; no measurement series; ChatGPT not tested (login required)."
   }
 ]
